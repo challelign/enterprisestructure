@@ -1,0 +1,655 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+// ======================================================
+// ENUMS
+// ======================================================
+
+enum OrganizationType {
+  HEADQUARTERS
+  MINISTRY
+  REGION
+  ZONE
+  WOREDA
+  KEBELE
+  DEPARTMENT
+  BRANCH
+  PROJECT
+  EXTERNAL_PARTNER
+}
+
+enum AccountStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  LOCKED
+  ARCHIVED
+}
+
+enum UserType {
+  INTERNAL
+  EXTERNAL
+  CONTRACTOR
+  CITIZEN
+  API
+  SYSTEM
+}
+
+enum PermissionEffect {
+  ALLOW
+  DENY
+}
+
+enum ScopeType {
+  GLOBAL
+  TENANT
+  ORGANIZATION
+  DESCENDANT
+  DEPARTMENT
+  SELF
+}
+
+enum MfaMethodType {
+  TOTP
+  EMAIL
+  SMS
+  WEBAUTHN
+}
+
+enum AuditActionType {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  PERMISSION_CHECK
+  ROLE_ASSIGNED
+  POLICY_APPLIED
+}
+
+// ======================================================
+// TENANTS
+// ======================================================
+
+model Tenant {
+  id String @id @default(uuid())
+
+  name String
+  code String @unique
+
+  isActive Boolean @default(true)
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizations Organization[]
+  users         User[]
+  roles         Role[]
+  permissions   Permission[]
+}
+
+// ======================================================
+// ORGANIZATIONS
+// ======================================================
+
+model Organization {
+  id String @id @default(uuid())
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+
+  name String
+  code String @unique
+
+  displayName String?
+  description String?
+
+  // Hierarchy
+  parentId String?
+
+  parent Organization? @relation( "OrganizationHierarchy", fields: [parentId], references: [id] )
+
+  children Organization[] @relation("OrganizationHierarchy")
+
+  hierarchyPath  String
+  hierarchyLevel Int    @default(0)
+
+  organizationType OrganizationType
+
+  // Status
+  isActive Boolean @default(true)
+  isSystem Boolean @default(false)
+
+  // Geographic
+  country String?
+  region  String?
+  zone    String?
+  woreda  String?
+  city    String?
+  address String?
+
+  latitude  Decimal? @db.Decimal(10, 8)
+  longitude Decimal? @db.Decimal(11, 8)
+
+  // Contact
+  email   String?
+  phone   String?
+  website String?
+
+  // Config
+  settings Json?
+  metadata Json?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy String?
+  updatedBy String?
+
+  // Soft Delete
+  isDeleted Boolean @default(false)
+
+  deletedAt DateTime?
+  deletedBy String?
+
+  version Int @default(1)
+
+  // Relations
+  userOrganizationRoles UserOrganizationRole[]
+  userClaims            UserClaim[]
+
+  @@index([tenantId])
+  @@index([parentId])
+  @@index([hierarchyPath])
+  @@index([organizationType])
+  @@index([isDeleted])
+}
+
+// ======================================================
+// USERS
+// ======================================================
+
+model User {
+  id String @id @default(uuid())
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+
+  username    String  @unique
+  email       String  @unique
+  phoneNumber String?
+
+  userType UserType @default(INTERNAL)
+
+  // Authentication
+  passwordHash String
+
+  passwordChangedAt  DateTime?
+  mustChangePassword Boolean   @default(false)
+
+  // Status
+  accountStatus AccountStatus @default(PENDING)
+
+  isActive Boolean @default(true)
+  isLocked Boolean @default(false)
+
+  lockedUntil DateTime?
+
+  failedLoginAttempts Int @default(0)
+
+  lastLoginAt DateTime?
+  lastLoginIp String?
+
+  // Verification
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+
+  // Security
+  mfaEnabled Boolean @default(false)
+
+  securityStamp String?
+
+  metadata Json?
+
+  // Audit
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy String?
+  updatedBy String?
+
+  // Soft Delete
+  isDeleted Boolean @default(false)
+
+  deletedAt DateTime?
+  deletedBy String?
+
+  version Int @default(1)
+
+  // Relations
+  profile UserProfile?
+
+  sessions   UserSession[]
+  mfaMethods UserMfaMethod[]
+
+  organizationRoles UserOrganizationRole[]
+  claims            UserClaim[]
+
+  authorizationAudits AuthorizationAudit[]
+
+  @@index([tenantId])
+  @@index([email])
+  @@index([username])
+  @@index([accountStatus])
+  @@index([isDeleted])
+}
+
+// ======================================================
+// USER PROFILES
+// ======================================================
+
+model UserProfile {
+  id String @id @default(uuid())
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  firstName  String?
+  middleName String?
+  lastName   String?
+
+  displayName String?
+
+  dateOfBirth DateTime?
+
+  gender String?
+
+  profilePhotoUrl String?
+
+  nationality String?
+
+  preferredLanguage String?
+  timezone          String?
+
+  jobTitle String?
+
+  employeeId String?
+
+  bio String?
+
+  address String?
+
+  country String?
+  region  String?
+  city    String?
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ======================================================
+// USER SESSIONS
+// ======================================================
+
+model UserSession {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  tenantId String
+
+  sessionTokenHash String
+
+  refreshTokenHash String?
+
+  ipAddress String?
+  userAgent String?
+
+  deviceName String?
+  deviceType String?
+
+  browser         String?
+  operatingSystem String?
+
+  country String?
+  city    String?
+
+  isActive Boolean @default(true)
+
+  lastActivityAt DateTime?
+
+  expiresAt DateTime
+
+  revokedAt     DateTime?
+  revokedReason String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([tenantId])
+  @@index([isActive])
+}
+
+// ======================================================
+// MFA METHODS
+// ======================================================
+
+model UserMfaMethod {
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  methodType MfaMethodType
+
+  secretHash String?
+
+  identifier String?
+
+  isVerified Boolean @default(false)
+
+  isDefault Boolean @default(false)
+
+  isActive Boolean @default(true)
+
+  backupCodes Json?
+
+  lastUsedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ======================================================
+// ROLES
+// ======================================================
+
+model Role {
+  id String @id @default(uuid())
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+
+  name String
+
+  roleKey String @unique
+
+  description String?
+
+  // Role Hierarchy
+  hierarchyLevel Int
+
+ 
+
+ 
+inheritsFromId String?
+
+inheritsFrom Role? @relation(  "RoleHierarchy",  fields: [inheritsFromId],  references: [id])
+
+ 
+
+  inheritedRoles Role[] @relation("RoleHierarchy")
+
+  // Scope
+  scopeType ScopeType @default(ORGANIZATION)
+
+  // Status
+  isSystemRole Boolean @default(false)
+  isActive     Boolean @default(true)
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy String?
+  updatedBy String?
+
+  isDeleted Boolean @default(false)
+
+  deletedAt DateTime?
+  deletedBy String?
+
+  // Relations
+  permissions RolePermission[]
+
+  userOrganizationRoles UserOrganizationRole[]
+
+  @@index([tenantId])
+  @@index([roleKey])
+  @@index([hierarchyLevel])
+  @@index([inheritsFromId])
+}
+
+// ======================================================
+// PERMISSIONS
+// ======================================================
+
+model Permission {
+  id String @id @default(uuid())
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
+
+  name String
+
+  permissionKey String @unique
+
+  resource String
+  action   String
+
+  description String?
+
+  scopeType ScopeType @default(ORGANIZATION)
+
+  moduleName String?
+
+  isSystemPermission Boolean @default(true)
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy String?
+  updatedBy String?
+
+  rolePermissions RolePermission[]
+
+  @@index([tenantId])
+  @@index([permissionKey])
+  @@index([resource])
+  @@index([action])
+}
+
+// ======================================================
+// ROLE PERMISSIONS
+// ======================================================
+
+model RolePermission {
+  id String @id @default(uuid())
+
+  tenantId String
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id])
+
+  effect PermissionEffect @default(ALLOW)
+
+  conditions Json?
+
+  isActive Boolean @default(true)
+
+  grantedAt DateTime @default(now())
+
+  grantedBy String?
+
+  metadata Json?
+
+  @@unique([roleId, permissionId])
+  @@index([tenantId])
+  @@index([roleId])
+  @@index([permissionId])
+}
+
+// ======================================================
+// USER ORGANIZATION ROLES
+// ======================================================
+
+model UserOrganizationRole {
+  id String @id @default(uuid())
+
+  tenantId String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  isPrimary Boolean @default(false)
+
+  isActive Boolean @default(true)
+
+  assignedAt DateTime @default(now())
+
+  assignedBy String?
+
+  expiresAt DateTime?
+
+  metadata Json?
+
+  @@unique([userId, organizationId, roleId])
+  @@index([tenantId])
+  @@index([userId])
+  @@index([organizationId])
+  @@index([roleId])
+}
+
+// ======================================================
+// USER CLAIMS
+// ======================================================
+
+model UserClaim {
+  id String @id @default(uuid())
+
+  tenantId String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+
+  claimType  String
+  claimValue String
+
+  isActive Boolean @default(true)
+
+  expiresAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  createdBy String?
+
+  metadata Json?
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([claimType])
+}
+
+// ======================================================
+// AUTHORIZATION POLICIES
+// ======================================================
+
+model AuthorizationPolicy {
+  id String @id @default(uuid())
+
+  tenantId String
+
+  name String
+
+  policyKey String @unique
+
+  resource String
+  action   String
+
+  effect PermissionEffect
+
+  priority Int @default(0)
+
+  conditions Json?
+
+  isActive Boolean @default(true)
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([policyKey])
+}
+
+// ======================================================
+// AUTHORIZATION AUDIT
+// ======================================================
+
+model AuthorizationAudit {
+  id String @id @default(uuid())
+
+  tenantId String
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  actionType AuditActionType
+
+  resourceType String?
+  resourceId   String?
+
+  permissionRequired String?
+
+  granted Boolean
+
+  reason String?
+
+  ipAddress String?
+  userAgent String?
+
+  organizationId String?
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([resourceType])
+  @@index([createdAt])
+}
+
+ 

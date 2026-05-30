@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -13,6 +12,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+     "target": "ES2023",
+    "ignoreDeprecations": "6.0",
     "plugins": [
       {
         "name": "next"
