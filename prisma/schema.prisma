@@ -91,13 +91,97 @@ model Tenant {
 
   metadata Json?
 
+  version Int @default(1)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   organizations Organization[]
+  
+  
   users         User[]
   roles         Role[]
   permissions   Permission[]
+
+  tenantModules TenantModule[]
+  policies      AuthorizationPolicy[]
+}
+
+
+
+model FeatureModule {
+  id String @id @default(uuid())
+
+  code String @unique
+  name String
+
+  description String?
+
+  version String?
+
+  isCoreModule Boolean @default(false)
+
+  isActive Boolean @default(true)
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenantModules TenantModule[]
+
+  @@index([code])
+}
+
+
+
+
+model TenantModule {
+  id String @id @default(uuid())
+
+  tenantId String
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  moduleId String
+  module FeatureModule @relation(fields: [moduleId], references: [id])
+
+  isEnabled Boolean @default(true)
+
+  enabledAt DateTime @default(now())
+
+  enabledBy String?
+
+  settings Json?
+
+  @@unique([tenantId, moduleId])
+
+  @@index([tenantId])
+  @@index([moduleId])
+}
+
+
+
+model ResourceClaim {
+  id String @id @default(uuid())
+
+  tenantId String
+
+  resourceType String
+  resourceId String
+
+  organizationId String?
+
+  claimType String
+  claimValue String
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  createdBy String?
+
+  @@index([resourceType, resourceId])
+  @@index([tenantId])
 }
 
 // ======================================================
@@ -125,7 +209,7 @@ model Organization {
 
   hierarchyPath  String
   hierarchyLevel Int    @default(0)
-
+  authorizationAudits AuthorizationAudit[]
   organizationType OrganizationType
 
   // Status
@@ -590,13 +674,14 @@ model AuthorizationPolicy {
   id String @id @default(uuid())
 
   tenantId String
+  tenant Tenant @relation(fields: [tenantId], references: [id])
 
   name String
 
   policyKey String @unique
 
   resource String
-  action   String
+  action String
 
   effect PermissionEffect
 
@@ -609,11 +694,16 @@ model AuthorizationPolicy {
   metadata Json?
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdBy String?
+  updatedBy String?
+
+  version Int @default(1)
 
   @@index([tenantId])
   @@index([policyKey])
 }
-
 // ======================================================
 // AUTHORIZATION AUDIT
 // ======================================================
@@ -641,6 +731,8 @@ model AuthorizationAudit {
   userAgent String?
 
   organizationId String?
+
+  organization Organization? @relation(  fields: [organizationId],  references: [id])
 
   metadata Json?
 

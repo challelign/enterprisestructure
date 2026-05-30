@@ -251,6 +251,7 @@ export type AuthorizationAuditWhereInput = {
   metadata?: Prisma.JsonNullableFilter<"AuthorizationAudit">
   createdAt?: Prisma.DateTimeFilter<"AuthorizationAudit"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
 }
 
 export type AuthorizationAuditOrderByWithRelationInput = {
@@ -269,6 +270,7 @@ export type AuthorizationAuditOrderByWithRelationInput = {
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  organization?: Prisma.OrganizationOrderByWithRelationInput
 }
 
 export type AuthorizationAuditWhereUniqueInput = Prisma.AtLeast<{
@@ -290,6 +292,7 @@ export type AuthorizationAuditWhereUniqueInput = Prisma.AtLeast<{
   metadata?: Prisma.JsonNullableFilter<"AuthorizationAudit">
   createdAt?: Prisma.DateTimeFilter<"AuthorizationAudit"> | Date | string
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  organization?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
 }, "id">
 
 export type AuthorizationAuditOrderByWithAggregationInput = {
@@ -343,10 +346,10 @@ export type AuthorizationAuditCreateInput = {
   reason?: string | null
   ipAddress?: string | null
   userAgent?: string | null
-  organizationId?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutAuthorizationAuditsInput
+  organization?: Prisma.OrganizationCreateNestedOneWithoutAuthorizationAuditsInput
 }
 
 export type AuthorizationAuditUncheckedCreateInput = {
@@ -377,10 +380,10 @@ export type AuthorizationAuditUpdateInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutAuthorizationAuditsNestedInput
+  organization?: Prisma.OrganizationUpdateOneWithoutAuthorizationAuditsNestedInput
 }
 
 export type AuthorizationAuditUncheckedUpdateInput = {
@@ -428,7 +431,6 @@ export type AuthorizationAuditUpdateManyMutationInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -509,6 +511,48 @@ export type AuthorizationAuditMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type AuthorizationAuditCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.AuthorizationAuditCreateWithoutOrganizationInput, Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput> | Prisma.AuthorizationAuditCreateWithoutOrganizationInput[] | Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.AuthorizationAuditCreateOrConnectWithoutOrganizationInput | Prisma.AuthorizationAuditCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.AuthorizationAuditCreateManyOrganizationInputEnvelope
+  connect?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+}
+
+export type AuthorizationAuditUncheckedCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.AuthorizationAuditCreateWithoutOrganizationInput, Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput> | Prisma.AuthorizationAuditCreateWithoutOrganizationInput[] | Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.AuthorizationAuditCreateOrConnectWithoutOrganizationInput | Prisma.AuthorizationAuditCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.AuthorizationAuditCreateManyOrganizationInputEnvelope
+  connect?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+}
+
+export type AuthorizationAuditUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.AuthorizationAuditCreateWithoutOrganizationInput, Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput> | Prisma.AuthorizationAuditCreateWithoutOrganizationInput[] | Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.AuthorizationAuditCreateOrConnectWithoutOrganizationInput | Prisma.AuthorizationAuditCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.AuthorizationAuditUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.AuthorizationAuditUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.AuthorizationAuditCreateManyOrganizationInputEnvelope
+  set?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+  disconnect?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+  delete?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+  connect?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+  update?: Prisma.AuthorizationAuditUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.AuthorizationAuditUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.AuthorizationAuditUpdateManyWithWhereWithoutOrganizationInput | Prisma.AuthorizationAuditUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.AuthorizationAuditScalarWhereInput | Prisma.AuthorizationAuditScalarWhereInput[]
+}
+
+export type AuthorizationAuditUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.AuthorizationAuditCreateWithoutOrganizationInput, Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput> | Prisma.AuthorizationAuditCreateWithoutOrganizationInput[] | Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.AuthorizationAuditCreateOrConnectWithoutOrganizationInput | Prisma.AuthorizationAuditCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.AuthorizationAuditUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.AuthorizationAuditUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.AuthorizationAuditCreateManyOrganizationInputEnvelope
+  set?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+  disconnect?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+  delete?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+  connect?: Prisma.AuthorizationAuditWhereUniqueInput | Prisma.AuthorizationAuditWhereUniqueInput[]
+  update?: Prisma.AuthorizationAuditUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.AuthorizationAuditUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.AuthorizationAuditUpdateManyWithWhereWithoutOrganizationInput | Prisma.AuthorizationAuditUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.AuthorizationAuditScalarWhereInput | Prisma.AuthorizationAuditScalarWhereInput[]
+}
+
 export type AuthorizationAuditCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.AuthorizationAuditCreateWithoutUserInput, Prisma.AuthorizationAuditUncheckedCreateWithoutUserInput> | Prisma.AuthorizationAuditCreateWithoutUserInput[] | Prisma.AuthorizationAuditUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.AuthorizationAuditCreateOrConnectWithoutUserInput | Prisma.AuthorizationAuditCreateOrConnectWithoutUserInput[]
@@ -555,6 +599,84 @@ export type EnumAuditActionTypeFieldUpdateOperationsInput = {
   set?: $Enums.AuditActionType
 }
 
+export type AuthorizationAuditCreateWithoutOrganizationInput = {
+  id?: string
+  tenantId: string
+  actionType: $Enums.AuditActionType
+  resourceType?: string | null
+  resourceId?: string | null
+  permissionRequired?: string | null
+  granted: boolean
+  reason?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutAuthorizationAuditsInput
+}
+
+export type AuthorizationAuditUncheckedCreateWithoutOrganizationInput = {
+  id?: string
+  tenantId: string
+  userId?: string | null
+  actionType: $Enums.AuditActionType
+  resourceType?: string | null
+  resourceId?: string | null
+  permissionRequired?: string | null
+  granted: boolean
+  reason?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+}
+
+export type AuthorizationAuditCreateOrConnectWithoutOrganizationInput = {
+  where: Prisma.AuthorizationAuditWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuthorizationAuditCreateWithoutOrganizationInput, Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput>
+}
+
+export type AuthorizationAuditCreateManyOrganizationInputEnvelope = {
+  data: Prisma.AuthorizationAuditCreateManyOrganizationInput | Prisma.AuthorizationAuditCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
+}
+
+export type AuthorizationAuditUpsertWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.AuthorizationAuditWhereUniqueInput
+  update: Prisma.XOR<Prisma.AuthorizationAuditUpdateWithoutOrganizationInput, Prisma.AuthorizationAuditUncheckedUpdateWithoutOrganizationInput>
+  create: Prisma.XOR<Prisma.AuthorizationAuditCreateWithoutOrganizationInput, Prisma.AuthorizationAuditUncheckedCreateWithoutOrganizationInput>
+}
+
+export type AuthorizationAuditUpdateWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.AuthorizationAuditWhereUniqueInput
+  data: Prisma.XOR<Prisma.AuthorizationAuditUpdateWithoutOrganizationInput, Prisma.AuthorizationAuditUncheckedUpdateWithoutOrganizationInput>
+}
+
+export type AuthorizationAuditUpdateManyWithWhereWithoutOrganizationInput = {
+  where: Prisma.AuthorizationAuditScalarWhereInput
+  data: Prisma.XOR<Prisma.AuthorizationAuditUpdateManyMutationInput, Prisma.AuthorizationAuditUncheckedUpdateManyWithoutOrganizationInput>
+}
+
+export type AuthorizationAuditScalarWhereInput = {
+  AND?: Prisma.AuthorizationAuditScalarWhereInput | Prisma.AuthorizationAuditScalarWhereInput[]
+  OR?: Prisma.AuthorizationAuditScalarWhereInput[]
+  NOT?: Prisma.AuthorizationAuditScalarWhereInput | Prisma.AuthorizationAuditScalarWhereInput[]
+  id?: Prisma.StringFilter<"AuthorizationAudit"> | string
+  tenantId?: Prisma.StringFilter<"AuthorizationAudit"> | string
+  userId?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
+  actionType?: Prisma.EnumAuditActionTypeFilter<"AuthorizationAudit"> | $Enums.AuditActionType
+  resourceType?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
+  resourceId?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
+  permissionRequired?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
+  granted?: Prisma.BoolFilter<"AuthorizationAudit"> | boolean
+  reason?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
+  ipAddress?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
+  userAgent?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
+  organizationId?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
+  metadata?: Prisma.JsonNullableFilter<"AuthorizationAudit">
+  createdAt?: Prisma.DateTimeFilter<"AuthorizationAudit"> | Date | string
+}
+
 export type AuthorizationAuditCreateWithoutUserInput = {
   id?: string
   tenantId: string
@@ -566,9 +688,9 @@ export type AuthorizationAuditCreateWithoutUserInput = {
   reason?: string | null
   ipAddress?: string | null
   userAgent?: string | null
-  organizationId?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
+  organization?: Prisma.OrganizationCreateNestedOneWithoutAuthorizationAuditsInput
 }
 
 export type AuthorizationAuditUncheckedCreateWithoutUserInput = {
@@ -613,24 +735,68 @@ export type AuthorizationAuditUpdateManyWithWhereWithoutUserInput = {
   data: Prisma.XOR<Prisma.AuthorizationAuditUpdateManyMutationInput, Prisma.AuthorizationAuditUncheckedUpdateManyWithoutUserInput>
 }
 
-export type AuthorizationAuditScalarWhereInput = {
-  AND?: Prisma.AuthorizationAuditScalarWhereInput | Prisma.AuthorizationAuditScalarWhereInput[]
-  OR?: Prisma.AuthorizationAuditScalarWhereInput[]
-  NOT?: Prisma.AuthorizationAuditScalarWhereInput | Prisma.AuthorizationAuditScalarWhereInput[]
-  id?: Prisma.StringFilter<"AuthorizationAudit"> | string
-  tenantId?: Prisma.StringFilter<"AuthorizationAudit"> | string
-  userId?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
-  actionType?: Prisma.EnumAuditActionTypeFilter<"AuthorizationAudit"> | $Enums.AuditActionType
-  resourceType?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
-  resourceId?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
-  permissionRequired?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
-  granted?: Prisma.BoolFilter<"AuthorizationAudit"> | boolean
-  reason?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
-  ipAddress?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
-  userAgent?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
-  organizationId?: Prisma.StringNullableFilter<"AuthorizationAudit"> | string | null
-  metadata?: Prisma.JsonNullableFilter<"AuthorizationAudit">
-  createdAt?: Prisma.DateTimeFilter<"AuthorizationAudit"> | Date | string
+export type AuthorizationAuditCreateManyOrganizationInput = {
+  id?: string
+  tenantId: string
+  userId?: string | null
+  actionType: $Enums.AuditActionType
+  resourceType?: string | null
+  resourceId?: string | null
+  permissionRequired?: string | null
+  granted: boolean
+  reason?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+}
+
+export type AuthorizationAuditUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  actionType?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
+  resourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permissionRequired?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  granted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutAuthorizationAuditsNestedInput
+}
+
+export type AuthorizationAuditUncheckedUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actionType?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
+  resourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permissionRequired?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  granted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AuthorizationAuditUncheckedUpdateManyWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actionType?: Prisma.EnumAuditActionTypeFieldUpdateOperationsInput | $Enums.AuditActionType
+  resourceType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resourceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  permissionRequired?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  granted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AuthorizationAuditCreateManyUserInput = {
@@ -660,9 +826,9 @@ export type AuthorizationAuditUpdateWithoutUserInput = {
   reason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  organizationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneWithoutAuthorizationAuditsNestedInput
 }
 
 export type AuthorizationAuditUncheckedUpdateWithoutUserInput = {
@@ -715,6 +881,7 @@ export type AuthorizationAuditSelect<ExtArgs extends runtime.Types.Extensions.In
   metadata?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.AuthorizationAudit$userArgs<ExtArgs>
+  organization?: boolean | Prisma.AuthorizationAudit$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["authorizationAudit"]>
 
 export type AuthorizationAuditSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -733,6 +900,7 @@ export type AuthorizationAuditSelectCreateManyAndReturn<ExtArgs extends runtime.
   metadata?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.AuthorizationAudit$userArgs<ExtArgs>
+  organization?: boolean | Prisma.AuthorizationAudit$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["authorizationAudit"]>
 
 export type AuthorizationAuditSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -751,6 +919,7 @@ export type AuthorizationAuditSelectUpdateManyAndReturn<ExtArgs extends runtime.
   metadata?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.AuthorizationAudit$userArgs<ExtArgs>
+  organization?: boolean | Prisma.AuthorizationAudit$organizationArgs<ExtArgs>
 }, ExtArgs["result"]["authorizationAudit"]>
 
 export type AuthorizationAuditSelectScalar = {
@@ -773,18 +942,22 @@ export type AuthorizationAuditSelectScalar = {
 export type AuthorizationAuditOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "userId" | "actionType" | "resourceType" | "resourceId" | "permissionRequired" | "granted" | "reason" | "ipAddress" | "userAgent" | "organizationId" | "metadata" | "createdAt", ExtArgs["result"]["authorizationAudit"]>
 export type AuthorizationAuditInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.AuthorizationAudit$userArgs<ExtArgs>
+  organization?: boolean | Prisma.AuthorizationAudit$organizationArgs<ExtArgs>
 }
 export type AuthorizationAuditIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.AuthorizationAudit$userArgs<ExtArgs>
+  organization?: boolean | Prisma.AuthorizationAudit$organizationArgs<ExtArgs>
 }
 export type AuthorizationAuditIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.AuthorizationAudit$userArgs<ExtArgs>
+  organization?: boolean | Prisma.AuthorizationAudit$organizationArgs<ExtArgs>
 }
 
 export type $AuthorizationAuditPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AuthorizationAudit"
   objects: {
     user: Prisma.$UserPayload<ExtArgs> | null
+    organization: Prisma.$OrganizationPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1196,6 +1369,7 @@ readonly fields: AuthorizationAuditFieldRefs;
 export interface Prisma__AuthorizationAuditClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.AuthorizationAudit$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuthorizationAudit$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  organization<T extends Prisma.AuthorizationAudit$organizationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AuthorizationAudit$organizationArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1656,6 +1830,25 @@ export type AuthorizationAudit$userArgs<ExtArgs extends runtime.Types.Extensions
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * AuthorizationAudit.organization
+ */
+export type AuthorizationAudit$organizationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Organization
+   */
+  select?: Prisma.OrganizationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Organization
+   */
+  omit?: Prisma.OrganizationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrganizationInclude<ExtArgs> | null
+  where?: Prisma.OrganizationWhereInput
 }
 
 /**

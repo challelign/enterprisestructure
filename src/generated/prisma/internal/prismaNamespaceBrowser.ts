@@ -52,6 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Tenant: 'Tenant',
+  FeatureModule: 'FeatureModule',
+  TenantModule: 'TenantModule',
+  ResourceClaim: 'ResourceClaim',
   Organization: 'Organization',
   User: 'User',
   UserProfile: 'UserProfile',
@@ -88,11 +91,57 @@ export const TenantScalarFieldEnum = {
   code: 'code',
   isActive: 'isActive',
   metadata: 'metadata',
+  version: 'version',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
+
+
+export const FeatureModuleScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  version: 'version',
+  isCoreModule: 'isCoreModule',
+  isActive: 'isActive',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FeatureModuleScalarFieldEnum = (typeof FeatureModuleScalarFieldEnum)[keyof typeof FeatureModuleScalarFieldEnum]
+
+
+export const TenantModuleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  moduleId: 'moduleId',
+  isEnabled: 'isEnabled',
+  enabledAt: 'enabledAt',
+  enabledBy: 'enabledBy',
+  settings: 'settings'
+} as const
+
+export type TenantModuleScalarFieldEnum = (typeof TenantModuleScalarFieldEnum)[keyof typeof TenantModuleScalarFieldEnum]
+
+
+export const ResourceClaimScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  resourceType: 'resourceType',
+  resourceId: 'resourceId',
+  organizationId: 'organizationId',
+  claimType: 'claimType',
+  claimValue: 'claimValue',
+  metadata: 'metadata',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy'
+} as const
+
+export type ResourceClaimScalarFieldEnum = (typeof ResourceClaimScalarFieldEnum)[keyof typeof ResourceClaimScalarFieldEnum]
 
 
 export const OrganizationScalarFieldEnum = {
@@ -346,7 +395,11 @@ export const AuthorizationPolicyScalarFieldEnum = {
   conditions: 'conditions',
   isActive: 'isActive',
   metadata: 'metadata',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  createdBy: 'createdBy',
+  updatedBy: 'updatedBy',
+  version: 'version'
 } as const
 
 export type AuthorizationPolicyScalarFieldEnum = (typeof AuthorizationPolicyScalarFieldEnum)[keyof typeof AuthorizationPolicyScalarFieldEnum]

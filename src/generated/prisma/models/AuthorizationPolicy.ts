@@ -28,10 +28,12 @@ export type AggregateAuthorizationPolicy = {
 
 export type AuthorizationPolicyAvgAggregateOutputType = {
   priority: number | null
+  version: number | null
 }
 
 export type AuthorizationPolicySumAggregateOutputType = {
   priority: number | null
+  version: number | null
 }
 
 export type AuthorizationPolicyMinAggregateOutputType = {
@@ -45,6 +47,10 @@ export type AuthorizationPolicyMinAggregateOutputType = {
   priority: number | null
   isActive: boolean | null
   createdAt: Date | null
+  updatedAt: Date | null
+  createdBy: string | null
+  updatedBy: string | null
+  version: number | null
 }
 
 export type AuthorizationPolicyMaxAggregateOutputType = {
@@ -58,6 +64,10 @@ export type AuthorizationPolicyMaxAggregateOutputType = {
   priority: number | null
   isActive: boolean | null
   createdAt: Date | null
+  updatedAt: Date | null
+  createdBy: string | null
+  updatedBy: string | null
+  version: number | null
 }
 
 export type AuthorizationPolicyCountAggregateOutputType = {
@@ -73,16 +83,22 @@ export type AuthorizationPolicyCountAggregateOutputType = {
   isActive: number
   metadata: number
   createdAt: number
+  updatedAt: number
+  createdBy: number
+  updatedBy: number
+  version: number
   _all: number
 }
 
 
 export type AuthorizationPolicyAvgAggregateInputType = {
   priority?: true
+  version?: true
 }
 
 export type AuthorizationPolicySumAggregateInputType = {
   priority?: true
+  version?: true
 }
 
 export type AuthorizationPolicyMinAggregateInputType = {
@@ -96,6 +112,10 @@ export type AuthorizationPolicyMinAggregateInputType = {
   priority?: true
   isActive?: true
   createdAt?: true
+  updatedAt?: true
+  createdBy?: true
+  updatedBy?: true
+  version?: true
 }
 
 export type AuthorizationPolicyMaxAggregateInputType = {
@@ -109,6 +129,10 @@ export type AuthorizationPolicyMaxAggregateInputType = {
   priority?: true
   isActive?: true
   createdAt?: true
+  updatedAt?: true
+  createdBy?: true
+  updatedBy?: true
+  version?: true
 }
 
 export type AuthorizationPolicyCountAggregateInputType = {
@@ -124,6 +148,10 @@ export type AuthorizationPolicyCountAggregateInputType = {
   isActive?: true
   metadata?: true
   createdAt?: true
+  updatedAt?: true
+  createdBy?: true
+  updatedBy?: true
+  version?: true
   _all?: true
 }
 
@@ -226,6 +254,10 @@ export type AuthorizationPolicyGroupByOutputType = {
   isActive: boolean
   metadata: runtime.JsonValue | null
   createdAt: Date
+  updatedAt: Date
+  createdBy: string | null
+  updatedBy: string | null
+  version: number
   _count: AuthorizationPolicyCountAggregateOutputType | null
   _avg: AuthorizationPolicyAvgAggregateOutputType | null
   _sum: AuthorizationPolicySumAggregateOutputType | null
@@ -264,6 +296,11 @@ export type AuthorizationPolicyWhereInput = {
   isActive?: Prisma.BoolFilter<"AuthorizationPolicy"> | boolean
   metadata?: Prisma.JsonNullableFilter<"AuthorizationPolicy">
   createdAt?: Prisma.DateTimeFilter<"AuthorizationPolicy"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AuthorizationPolicy"> | Date | string
+  createdBy?: Prisma.StringNullableFilter<"AuthorizationPolicy"> | string | null
+  updatedBy?: Prisma.StringNullableFilter<"AuthorizationPolicy"> | string | null
+  version?: Prisma.IntFilter<"AuthorizationPolicy"> | number
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type AuthorizationPolicyOrderByWithRelationInput = {
@@ -279,6 +316,11 @@ export type AuthorizationPolicyOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type AuthorizationPolicyWhereUniqueInput = Prisma.AtLeast<{
@@ -297,6 +339,11 @@ export type AuthorizationPolicyWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"AuthorizationPolicy"> | boolean
   metadata?: Prisma.JsonNullableFilter<"AuthorizationPolicy">
   createdAt?: Prisma.DateTimeFilter<"AuthorizationPolicy"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AuthorizationPolicy"> | Date | string
+  createdBy?: Prisma.StringNullableFilter<"AuthorizationPolicy"> | string | null
+  updatedBy?: Prisma.StringNullableFilter<"AuthorizationPolicy"> | string | null
+  version?: Prisma.IntFilter<"AuthorizationPolicy"> | number
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id" | "policyKey">
 
 export type AuthorizationPolicyOrderByWithAggregationInput = {
@@ -312,6 +359,10 @@ export type AuthorizationPolicyOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.AuthorizationPolicyCountOrderByAggregateInput
   _avg?: Prisma.AuthorizationPolicyAvgOrderByAggregateInput
   _max?: Prisma.AuthorizationPolicyMaxOrderByAggregateInput
@@ -335,11 +386,14 @@ export type AuthorizationPolicyScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"AuthorizationPolicy"> | boolean
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"AuthorizationPolicy">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AuthorizationPolicy"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AuthorizationPolicy"> | Date | string
+  createdBy?: Prisma.StringNullableWithAggregatesFilter<"AuthorizationPolicy"> | string | null
+  updatedBy?: Prisma.StringNullableWithAggregatesFilter<"AuthorizationPolicy"> | string | null
+  version?: Prisma.IntWithAggregatesFilter<"AuthorizationPolicy"> | number
 }
 
 export type AuthorizationPolicyCreateInput = {
   id?: string
-  tenantId: string
   name: string
   policyKey: string
   resource: string
@@ -350,6 +404,11 @@ export type AuthorizationPolicyCreateInput = {
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: string | null
+  updatedBy?: string | null
+  version?: number
+  tenant: Prisma.TenantCreateNestedOneWithoutPoliciesInput
 }
 
 export type AuthorizationPolicyUncheckedCreateInput = {
@@ -365,11 +424,14 @@ export type AuthorizationPolicyUncheckedCreateInput = {
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: string | null
+  updatedBy?: string | null
+  version?: number
 }
 
 export type AuthorizationPolicyUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   policyKey?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
@@ -380,6 +442,11 @@ export type AuthorizationPolicyUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutPoliciesNestedInput
 }
 
 export type AuthorizationPolicyUncheckedUpdateInput = {
@@ -395,6 +462,10 @@ export type AuthorizationPolicyUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AuthorizationPolicyCreateManyInput = {
@@ -410,11 +481,14 @@ export type AuthorizationPolicyCreateManyInput = {
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: string | null
+  updatedBy?: string | null
+  version?: number
 }
 
 export type AuthorizationPolicyUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   policyKey?: Prisma.StringFieldUpdateOperationsInput | string
   resource?: Prisma.StringFieldUpdateOperationsInput | string
@@ -425,6 +499,10 @@ export type AuthorizationPolicyUpdateManyMutationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type AuthorizationPolicyUncheckedUpdateManyInput = {
@@ -440,6 +518,20 @@ export type AuthorizationPolicyUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type AuthorizationPolicyListRelationFilter = {
+  every?: Prisma.AuthorizationPolicyWhereInput
+  some?: Prisma.AuthorizationPolicyWhereInput
+  none?: Prisma.AuthorizationPolicyWhereInput
+}
+
+export type AuthorizationPolicyOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type AuthorizationPolicyCountOrderByAggregateInput = {
@@ -455,10 +547,15 @@ export type AuthorizationPolicyCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AuthorizationPolicyAvgOrderByAggregateInput = {
   priority?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AuthorizationPolicyMaxOrderByAggregateInput = {
@@ -472,6 +569,10 @@ export type AuthorizationPolicyMaxOrderByAggregateInput = {
   priority?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AuthorizationPolicyMinOrderByAggregateInput = {
@@ -485,10 +586,213 @@ export type AuthorizationPolicyMinOrderByAggregateInput = {
   priority?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+  createdBy?: Prisma.SortOrder
+  updatedBy?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type AuthorizationPolicySumOrderByAggregateInput = {
   priority?: Prisma.SortOrder
+  version?: Prisma.SortOrder
+}
+
+export type AuthorizationPolicyCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.AuthorizationPolicyCreateWithoutTenantInput, Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput> | Prisma.AuthorizationPolicyCreateWithoutTenantInput[] | Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.AuthorizationPolicyCreateOrConnectWithoutTenantInput | Prisma.AuthorizationPolicyCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.AuthorizationPolicyCreateManyTenantInputEnvelope
+  connect?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+}
+
+export type AuthorizationPolicyUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.AuthorizationPolicyCreateWithoutTenantInput, Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput> | Prisma.AuthorizationPolicyCreateWithoutTenantInput[] | Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.AuthorizationPolicyCreateOrConnectWithoutTenantInput | Prisma.AuthorizationPolicyCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.AuthorizationPolicyCreateManyTenantInputEnvelope
+  connect?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+}
+
+export type AuthorizationPolicyUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.AuthorizationPolicyCreateWithoutTenantInput, Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput> | Prisma.AuthorizationPolicyCreateWithoutTenantInput[] | Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.AuthorizationPolicyCreateOrConnectWithoutTenantInput | Prisma.AuthorizationPolicyCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.AuthorizationPolicyUpsertWithWhereUniqueWithoutTenantInput | Prisma.AuthorizationPolicyUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.AuthorizationPolicyCreateManyTenantInputEnvelope
+  set?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+  disconnect?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+  delete?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+  connect?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+  update?: Prisma.AuthorizationPolicyUpdateWithWhereUniqueWithoutTenantInput | Prisma.AuthorizationPolicyUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.AuthorizationPolicyUpdateManyWithWhereWithoutTenantInput | Prisma.AuthorizationPolicyUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.AuthorizationPolicyScalarWhereInput | Prisma.AuthorizationPolicyScalarWhereInput[]
+}
+
+export type AuthorizationPolicyUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.AuthorizationPolicyCreateWithoutTenantInput, Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput> | Prisma.AuthorizationPolicyCreateWithoutTenantInput[] | Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.AuthorizationPolicyCreateOrConnectWithoutTenantInput | Prisma.AuthorizationPolicyCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.AuthorizationPolicyUpsertWithWhereUniqueWithoutTenantInput | Prisma.AuthorizationPolicyUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.AuthorizationPolicyCreateManyTenantInputEnvelope
+  set?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+  disconnect?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+  delete?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+  connect?: Prisma.AuthorizationPolicyWhereUniqueInput | Prisma.AuthorizationPolicyWhereUniqueInput[]
+  update?: Prisma.AuthorizationPolicyUpdateWithWhereUniqueWithoutTenantInput | Prisma.AuthorizationPolicyUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.AuthorizationPolicyUpdateManyWithWhereWithoutTenantInput | Prisma.AuthorizationPolicyUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.AuthorizationPolicyScalarWhereInput | Prisma.AuthorizationPolicyScalarWhereInput[]
+}
+
+export type AuthorizationPolicyCreateWithoutTenantInput = {
+  id?: string
+  name: string
+  policyKey: string
+  resource: string
+  action: string
+  effect: $Enums.PermissionEffect
+  priority?: number
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: string | null
+  updatedBy?: string | null
+  version?: number
+}
+
+export type AuthorizationPolicyUncheckedCreateWithoutTenantInput = {
+  id?: string
+  name: string
+  policyKey: string
+  resource: string
+  action: string
+  effect: $Enums.PermissionEffect
+  priority?: number
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: string | null
+  updatedBy?: string | null
+  version?: number
+}
+
+export type AuthorizationPolicyCreateOrConnectWithoutTenantInput = {
+  where: Prisma.AuthorizationPolicyWhereUniqueInput
+  create: Prisma.XOR<Prisma.AuthorizationPolicyCreateWithoutTenantInput, Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput>
+}
+
+export type AuthorizationPolicyCreateManyTenantInputEnvelope = {
+  data: Prisma.AuthorizationPolicyCreateManyTenantInput | Prisma.AuthorizationPolicyCreateManyTenantInput[]
+  skipDuplicates?: boolean
+}
+
+export type AuthorizationPolicyUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.AuthorizationPolicyWhereUniqueInput
+  update: Prisma.XOR<Prisma.AuthorizationPolicyUpdateWithoutTenantInput, Prisma.AuthorizationPolicyUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.AuthorizationPolicyCreateWithoutTenantInput, Prisma.AuthorizationPolicyUncheckedCreateWithoutTenantInput>
+}
+
+export type AuthorizationPolicyUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.AuthorizationPolicyWhereUniqueInput
+  data: Prisma.XOR<Prisma.AuthorizationPolicyUpdateWithoutTenantInput, Prisma.AuthorizationPolicyUncheckedUpdateWithoutTenantInput>
+}
+
+export type AuthorizationPolicyUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.AuthorizationPolicyScalarWhereInput
+  data: Prisma.XOR<Prisma.AuthorizationPolicyUpdateManyMutationInput, Prisma.AuthorizationPolicyUncheckedUpdateManyWithoutTenantInput>
+}
+
+export type AuthorizationPolicyScalarWhereInput = {
+  AND?: Prisma.AuthorizationPolicyScalarWhereInput | Prisma.AuthorizationPolicyScalarWhereInput[]
+  OR?: Prisma.AuthorizationPolicyScalarWhereInput[]
+  NOT?: Prisma.AuthorizationPolicyScalarWhereInput | Prisma.AuthorizationPolicyScalarWhereInput[]
+  id?: Prisma.StringFilter<"AuthorizationPolicy"> | string
+  tenantId?: Prisma.StringFilter<"AuthorizationPolicy"> | string
+  name?: Prisma.StringFilter<"AuthorizationPolicy"> | string
+  policyKey?: Prisma.StringFilter<"AuthorizationPolicy"> | string
+  resource?: Prisma.StringFilter<"AuthorizationPolicy"> | string
+  action?: Prisma.StringFilter<"AuthorizationPolicy"> | string
+  effect?: Prisma.EnumPermissionEffectFilter<"AuthorizationPolicy"> | $Enums.PermissionEffect
+  priority?: Prisma.IntFilter<"AuthorizationPolicy"> | number
+  conditions?: Prisma.JsonNullableFilter<"AuthorizationPolicy">
+  isActive?: Prisma.BoolFilter<"AuthorizationPolicy"> | boolean
+  metadata?: Prisma.JsonNullableFilter<"AuthorizationPolicy">
+  createdAt?: Prisma.DateTimeFilter<"AuthorizationPolicy"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"AuthorizationPolicy"> | Date | string
+  createdBy?: Prisma.StringNullableFilter<"AuthorizationPolicy"> | string | null
+  updatedBy?: Prisma.StringNullableFilter<"AuthorizationPolicy"> | string | null
+  version?: Prisma.IntFilter<"AuthorizationPolicy"> | number
+}
+
+export type AuthorizationPolicyCreateManyTenantInput = {
+  id?: string
+  name: string
+  policyKey: string
+  resource: string
+  action: string
+  effect: $Enums.PermissionEffect
+  priority?: number
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: string | null
+  updatedBy?: string | null
+  version?: number
+}
+
+export type AuthorizationPolicyUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  policyKey?: Prisma.StringFieldUpdateOperationsInput | string
+  resource?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.StringFieldUpdateOperationsInput | string
+  effect?: Prisma.EnumPermissionEffectFieldUpdateOperationsInput | $Enums.PermissionEffect
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type AuthorizationPolicyUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  policyKey?: Prisma.StringFieldUpdateOperationsInput | string
+  resource?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.StringFieldUpdateOperationsInput | string
+  effect?: Prisma.EnumPermissionEffectFieldUpdateOperationsInput | $Enums.PermissionEffect
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type AuthorizationPolicyUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  policyKey?: Prisma.StringFieldUpdateOperationsInput | string
+  resource?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.StringFieldUpdateOperationsInput | string
+  effect?: Prisma.EnumPermissionEffectFieldUpdateOperationsInput | $Enums.PermissionEffect
+  priority?: Prisma.IntFieldUpdateOperationsInput | number
+  conditions?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -506,6 +810,11 @@ export type AuthorizationPolicySelect<ExtArgs extends runtime.Types.Extensions.I
   isActive?: boolean
   metadata?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  createdBy?: boolean
+  updatedBy?: boolean
+  version?: boolean
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["authorizationPolicy"]>
 
 export type AuthorizationPolicySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -521,6 +830,11 @@ export type AuthorizationPolicySelectCreateManyAndReturn<ExtArgs extends runtime
   isActive?: boolean
   metadata?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  createdBy?: boolean
+  updatedBy?: boolean
+  version?: boolean
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["authorizationPolicy"]>
 
 export type AuthorizationPolicySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -536,6 +850,11 @@ export type AuthorizationPolicySelectUpdateManyAndReturn<ExtArgs extends runtime
   isActive?: boolean
   metadata?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  createdBy?: boolean
+  updatedBy?: boolean
+  version?: boolean
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["authorizationPolicy"]>
 
 export type AuthorizationPolicySelectScalar = {
@@ -551,13 +870,28 @@ export type AuthorizationPolicySelectScalar = {
   isActive?: boolean
   metadata?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
+  createdBy?: boolean
+  updatedBy?: boolean
+  version?: boolean
 }
 
-export type AuthorizationPolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "name" | "policyKey" | "resource" | "action" | "effect" | "priority" | "conditions" | "isActive" | "metadata" | "createdAt", ExtArgs["result"]["authorizationPolicy"]>
+export type AuthorizationPolicyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "name" | "policyKey" | "resource" | "action" | "effect" | "priority" | "conditions" | "isActive" | "metadata" | "createdAt" | "updatedAt" | "createdBy" | "updatedBy" | "version", ExtArgs["result"]["authorizationPolicy"]>
+export type AuthorizationPolicyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+}
+export type AuthorizationPolicyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+}
+export type AuthorizationPolicyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+}
 
 export type $AuthorizationPolicyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "AuthorizationPolicy"
-  objects: {}
+  objects: {
+    tenant: Prisma.$TenantPayload<ExtArgs>
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     tenantId: string
@@ -571,6 +905,10 @@ export type $AuthorizationPolicyPayload<ExtArgs extends runtime.Types.Extensions
     isActive: boolean
     metadata: runtime.JsonValue | null
     createdAt: Date
+    updatedAt: Date
+    createdBy: string | null
+    updatedBy: string | null
+    version: number
   }, ExtArgs["result"]["authorizationPolicy"]>
   composites: {}
 }
@@ -965,6 +1303,7 @@ readonly fields: AuthorizationPolicyFieldRefs;
  */
 export interface Prisma__AuthorizationPolicyClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1006,6 +1345,10 @@ export interface AuthorizationPolicyFieldRefs {
   readonly isActive: Prisma.FieldRef<"AuthorizationPolicy", 'Boolean'>
   readonly metadata: Prisma.FieldRef<"AuthorizationPolicy", 'Json'>
   readonly createdAt: Prisma.FieldRef<"AuthorizationPolicy", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"AuthorizationPolicy", 'DateTime'>
+  readonly createdBy: Prisma.FieldRef<"AuthorizationPolicy", 'String'>
+  readonly updatedBy: Prisma.FieldRef<"AuthorizationPolicy", 'String'>
+  readonly version: Prisma.FieldRef<"AuthorizationPolicy", 'Int'>
 }
     
 
@@ -1022,6 +1365,10 @@ export type AuthorizationPolicyFindUniqueArgs<ExtArgs extends runtime.Types.Exte
    * Omit specific fields from the AuthorizationPolicy
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
   /**
    * Filter, which AuthorizationPolicy to fetch.
    */
@@ -1041,6 +1388,10 @@ export type AuthorizationPolicyFindUniqueOrThrowArgs<ExtArgs extends runtime.Typ
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
+  /**
    * Filter, which AuthorizationPolicy to fetch.
    */
   where: Prisma.AuthorizationPolicyWhereUniqueInput
@@ -1058,6 +1409,10 @@ export type AuthorizationPolicyFindFirstArgs<ExtArgs extends runtime.Types.Exten
    * Omit specific fields from the AuthorizationPolicy
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
   /**
    * Filter, which AuthorizationPolicy to fetch.
    */
@@ -1107,6 +1462,10 @@ export type AuthorizationPolicyFindFirstOrThrowArgs<ExtArgs extends runtime.Type
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
+  /**
    * Filter, which AuthorizationPolicy to fetch.
    */
   where?: Prisma.AuthorizationPolicyWhereInput
@@ -1154,6 +1513,10 @@ export type AuthorizationPolicyFindManyArgs<ExtArgs extends runtime.Types.Extens
    * Omit specific fields from the AuthorizationPolicy
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
   /**
    * Filter, which AuthorizationPolicies to fetch.
    */
@@ -1203,6 +1566,10 @@ export type AuthorizationPolicyCreateArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
+  /**
    * The data needed to create a AuthorizationPolicy.
    */
   data: Prisma.XOR<Prisma.AuthorizationPolicyCreateInput, Prisma.AuthorizationPolicyUncheckedCreateInput>
@@ -1236,6 +1603,10 @@ export type AuthorizationPolicyCreateManyAndReturnArgs<ExtArgs extends runtime.T
    */
   data: Prisma.AuthorizationPolicyCreateManyInput | Prisma.AuthorizationPolicyCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1250,6 +1621,10 @@ export type AuthorizationPolicyUpdateArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the AuthorizationPolicy
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
   /**
    * The data needed to update a AuthorizationPolicy.
    */
@@ -1302,6 +1677,10 @@ export type AuthorizationPolicyUpdateManyAndReturnArgs<ExtArgs extends runtime.T
    * Limit how many AuthorizationPolicies to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1316,6 +1695,10 @@ export type AuthorizationPolicyUpsertArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the AuthorizationPolicy
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
   /**
    * The filter to search for the AuthorizationPolicy to update in case it exists.
    */
@@ -1342,6 +1725,10 @@ export type AuthorizationPolicyDeleteArgs<ExtArgs extends runtime.Types.Extensio
    * Omit specific fields from the AuthorizationPolicy
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
   /**
    * Filter which AuthorizationPolicy to delete.
    */
@@ -1374,4 +1761,8 @@ export type AuthorizationPolicyDefaultArgs<ExtArgs extends runtime.Types.Extensi
    * Omit specific fields from the AuthorizationPolicy
    */
   omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
 }

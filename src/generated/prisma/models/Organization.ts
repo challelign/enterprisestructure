@@ -447,6 +447,7 @@ export type OrganizationWhereInput = {
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   parent?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   children?: Prisma.OrganizationListRelationFilter
+  authorizationAudits?: Prisma.AuthorizationAuditListRelationFilter
   userOrganizationRoles?: Prisma.UserOrganizationRoleListRelationFilter
   userClaims?: Prisma.UserClaimListRelationFilter
 }
@@ -488,6 +489,7 @@ export type OrganizationOrderByWithRelationInput = {
   tenant?: Prisma.TenantOrderByWithRelationInput
   parent?: Prisma.OrganizationOrderByWithRelationInput
   children?: Prisma.OrganizationOrderByRelationAggregateInput
+  authorizationAudits?: Prisma.AuthorizationAuditOrderByRelationAggregateInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleOrderByRelationAggregateInput
   userClaims?: Prisma.UserClaimOrderByRelationAggregateInput
 }
@@ -532,6 +534,7 @@ export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   parent?: Prisma.XOR<Prisma.OrganizationNullableScalarRelationFilter, Prisma.OrganizationWhereInput> | null
   children?: Prisma.OrganizationListRelationFilter
+  authorizationAudits?: Prisma.AuthorizationAuditListRelationFilter
   userOrganizationRoles?: Prisma.UserOrganizationRoleListRelationFilter
   userClaims?: Prisma.UserClaimListRelationFilter
 }, "id" | "code">
@@ -651,6 +654,7 @@ export type OrganizationCreateInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutOrganizationsInput
   parent?: Prisma.OrganizationCreateNestedOneWithoutChildrenInput
   children?: Prisma.OrganizationCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimCreateNestedManyWithoutOrganizationInput
 }
@@ -690,6 +694,7 @@ export type OrganizationUncheckedCreateInput = {
   deletedBy?: string | null
   version?: number
   children?: Prisma.OrganizationUncheckedCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimUncheckedCreateNestedManyWithoutOrganizationInput
 }
@@ -729,6 +734,7 @@ export type OrganizationUpdateInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrganizationsNestedInput
   parent?: Prisma.OrganizationUpdateOneWithoutChildrenNestedInput
   children?: Prisma.OrganizationUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUpdateManyWithoutOrganizationNestedInput
 }
@@ -768,6 +774,7 @@ export type OrganizationUncheckedUpdateInput = {
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   children?: Prisma.OrganizationUncheckedUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUncheckedUpdateManyWithoutOrganizationNestedInput
 }
@@ -1078,18 +1085,6 @@ export type OrganizationUncheckedCreateNestedManyWithoutParentInput = {
   connect?: Prisma.OrganizationWhereUniqueInput | Prisma.OrganizationWhereUniqueInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnumOrganizationTypeFieldUpdateOperationsInput = {
   set?: $Enums.OrganizationType
 }
@@ -1174,6 +1169,22 @@ export type OrganizationUpdateOneWithoutUserClaimsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutUserClaimsInput, Prisma.OrganizationUpdateWithoutUserClaimsInput>, Prisma.OrganizationUncheckedUpdateWithoutUserClaimsInput>
 }
 
+export type OrganizationCreateNestedOneWithoutAuthorizationAuditsInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAuthorizationAuditsInput, Prisma.OrganizationUncheckedCreateWithoutAuthorizationAuditsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAuthorizationAuditsInput
+  connect?: Prisma.OrganizationWhereUniqueInput
+}
+
+export type OrganizationUpdateOneWithoutAuthorizationAuditsNestedInput = {
+  create?: Prisma.XOR<Prisma.OrganizationCreateWithoutAuthorizationAuditsInput, Prisma.OrganizationUncheckedCreateWithoutAuthorizationAuditsInput>
+  connectOrCreate?: Prisma.OrganizationCreateOrConnectWithoutAuthorizationAuditsInput
+  upsert?: Prisma.OrganizationUpsertWithoutAuthorizationAuditsInput
+  disconnect?: Prisma.OrganizationWhereInput | boolean
+  delete?: Prisma.OrganizationWhereInput | boolean
+  connect?: Prisma.OrganizationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrganizationUpdateToOneWithWhereWithoutAuthorizationAuditsInput, Prisma.OrganizationUpdateWithoutAuthorizationAuditsInput>, Prisma.OrganizationUncheckedUpdateWithoutAuthorizationAuditsInput>
+}
+
 export type OrganizationCreateWithoutTenantInput = {
   id?: string
   name: string
@@ -1208,6 +1219,7 @@ export type OrganizationCreateWithoutTenantInput = {
   version?: number
   parent?: Prisma.OrganizationCreateNestedOneWithoutChildrenInput
   children?: Prisma.OrganizationCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimCreateNestedManyWithoutOrganizationInput
 }
@@ -1246,6 +1258,7 @@ export type OrganizationUncheckedCreateWithoutTenantInput = {
   deletedBy?: string | null
   version?: number
   children?: Prisma.OrganizationUncheckedCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimUncheckedCreateNestedManyWithoutOrganizationInput
 }
@@ -1349,6 +1362,7 @@ export type OrganizationCreateWithoutChildrenInput = {
   version?: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrganizationsInput
   parent?: Prisma.OrganizationCreateNestedOneWithoutChildrenInput
+  authorizationAudits?: Prisma.AuthorizationAuditCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimCreateNestedManyWithoutOrganizationInput
 }
@@ -1387,6 +1401,7 @@ export type OrganizationUncheckedCreateWithoutChildrenInput = {
   deletedAt?: Date | string | null
   deletedBy?: string | null
   version?: number
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimUncheckedCreateNestedManyWithoutOrganizationInput
 }
@@ -1430,6 +1445,7 @@ export type OrganizationCreateWithoutParentInput = {
   version?: number
   tenant: Prisma.TenantCreateNestedOneWithoutOrganizationsInput
   children?: Prisma.OrganizationCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimCreateNestedManyWithoutOrganizationInput
 }
@@ -1468,6 +1484,7 @@ export type OrganizationUncheckedCreateWithoutParentInput = {
   deletedBy?: string | null
   version?: number
   children?: Prisma.OrganizationUncheckedCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimUncheckedCreateNestedManyWithoutOrganizationInput
 }
@@ -1527,6 +1544,7 @@ export type OrganizationUpdateWithoutChildrenInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrganizationsNestedInput
   parent?: Prisma.OrganizationUpdateOneWithoutChildrenNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUpdateManyWithoutOrganizationNestedInput
 }
@@ -1565,6 +1583,7 @@ export type OrganizationUncheckedUpdateWithoutChildrenInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUncheckedUpdateManyWithoutOrganizationNestedInput
 }
@@ -1620,6 +1639,7 @@ export type OrganizationCreateWithoutUserOrganizationRolesInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutOrganizationsInput
   parent?: Prisma.OrganizationCreateNestedOneWithoutChildrenInput
   children?: Prisma.OrganizationCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimCreateNestedManyWithoutOrganizationInput
 }
 
@@ -1658,6 +1678,7 @@ export type OrganizationUncheckedCreateWithoutUserOrganizationRolesInput = {
   deletedBy?: string | null
   version?: number
   children?: Prisma.OrganizationUncheckedCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedCreateNestedManyWithoutOrganizationInput
   userClaims?: Prisma.UserClaimUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -1712,6 +1733,7 @@ export type OrganizationUpdateWithoutUserOrganizationRolesInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrganizationsNestedInput
   parent?: Prisma.OrganizationUpdateOneWithoutChildrenNestedInput
   children?: Prisma.OrganizationUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -1750,6 +1772,7 @@ export type OrganizationUncheckedUpdateWithoutUserOrganizationRolesInput = {
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   children?: Prisma.OrganizationUncheckedUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -1788,6 +1811,7 @@ export type OrganizationCreateWithoutUserClaimsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutOrganizationsInput
   parent?: Prisma.OrganizationCreateNestedOneWithoutChildrenInput
   children?: Prisma.OrganizationCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleCreateNestedManyWithoutOrganizationInput
 }
 
@@ -1826,6 +1850,7 @@ export type OrganizationUncheckedCreateWithoutUserClaimsInput = {
   deletedBy?: string | null
   version?: number
   children?: Prisma.OrganizationUncheckedCreateNestedManyWithoutParentInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedCreateNestedManyWithoutOrganizationInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedCreateNestedManyWithoutOrganizationInput
 }
 
@@ -1880,6 +1905,7 @@ export type OrganizationUpdateWithoutUserClaimsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrganizationsNestedInput
   parent?: Prisma.OrganizationUpdateOneWithoutChildrenNestedInput
   children?: Prisma.OrganizationUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUpdateManyWithoutOrganizationNestedInput
 }
 
@@ -1918,7 +1944,180 @@ export type OrganizationUncheckedUpdateWithoutUserClaimsInput = {
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   children?: Prisma.OrganizationUncheckedUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationCreateWithoutAuthorizationAuditsInput = {
+  id?: string
+  name: string
+  code: string
+  displayName?: string | null
+  description?: string | null
+  hierarchyPath: string
+  hierarchyLevel?: number
+  organizationType: $Enums.OrganizationType
+  isActive?: boolean
+  isSystem?: boolean
+  country?: string | null
+  region?: string | null
+  zone?: string | null
+  woreda?: string | null
+  city?: string | null
+  address?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  settings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: string | null
+  updatedBy?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  version?: number
+  tenant: Prisma.TenantCreateNestedOneWithoutOrganizationsInput
+  parent?: Prisma.OrganizationCreateNestedOneWithoutChildrenInput
+  children?: Prisma.OrganizationCreateNestedManyWithoutParentInput
+  userOrganizationRoles?: Prisma.UserOrganizationRoleCreateNestedManyWithoutOrganizationInput
+  userClaims?: Prisma.UserClaimCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationUncheckedCreateWithoutAuthorizationAuditsInput = {
+  id?: string
+  tenantId: string
+  name: string
+  code: string
+  displayName?: string | null
+  description?: string | null
+  parentId?: string | null
+  hierarchyPath: string
+  hierarchyLevel?: number
+  organizationType: $Enums.OrganizationType
+  isActive?: boolean
+  isSystem?: boolean
+  country?: string | null
+  region?: string | null
+  zone?: string | null
+  woreda?: string | null
+  city?: string | null
+  address?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  email?: string | null
+  phone?: string | null
+  website?: string | null
+  settings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: string | null
+  updatedBy?: string | null
+  isDeleted?: boolean
+  deletedAt?: Date | string | null
+  deletedBy?: string | null
+  version?: number
+  children?: Prisma.OrganizationUncheckedCreateNestedManyWithoutParentInput
+  userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedCreateNestedManyWithoutOrganizationInput
+  userClaims?: Prisma.UserClaimUncheckedCreateNestedManyWithoutOrganizationInput
+}
+
+export type OrganizationCreateOrConnectWithoutAuthorizationAuditsInput = {
+  where: Prisma.OrganizationWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAuthorizationAuditsInput, Prisma.OrganizationUncheckedCreateWithoutAuthorizationAuditsInput>
+}
+
+export type OrganizationUpsertWithoutAuthorizationAuditsInput = {
+  update: Prisma.XOR<Prisma.OrganizationUpdateWithoutAuthorizationAuditsInput, Prisma.OrganizationUncheckedUpdateWithoutAuthorizationAuditsInput>
+  create: Prisma.XOR<Prisma.OrganizationCreateWithoutAuthorizationAuditsInput, Prisma.OrganizationUncheckedCreateWithoutAuthorizationAuditsInput>
+  where?: Prisma.OrganizationWhereInput
+}
+
+export type OrganizationUpdateToOneWithWhereWithoutAuthorizationAuditsInput = {
+  where?: Prisma.OrganizationWhereInput
+  data: Prisma.XOR<Prisma.OrganizationUpdateWithoutAuthorizationAuditsInput, Prisma.OrganizationUncheckedUpdateWithoutAuthorizationAuditsInput>
+}
+
+export type OrganizationUpdateWithoutAuthorizationAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hierarchyPath?: Prisma.StringFieldUpdateOperationsInput | string
+  hierarchyLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  woreda?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutOrganizationsNestedInput
+  parent?: Prisma.OrganizationUpdateOneWithoutChildrenNestedInput
+  children?: Prisma.OrganizationUpdateManyWithoutParentNestedInput
+  userOrganizationRoles?: Prisma.UserOrganizationRoleUpdateManyWithoutOrganizationNestedInput
+  userClaims?: Prisma.UserClaimUpdateManyWithoutOrganizationNestedInput
+}
+
+export type OrganizationUncheckedUpdateWithoutAuthorizationAuditsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  parentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hierarchyPath?: Prisma.StringFieldUpdateOperationsInput | string
+  hierarchyLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  organizationType?: Prisma.EnumOrganizationTypeFieldUpdateOperationsInput | $Enums.OrganizationType
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  zone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  woreda?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  settings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  children?: Prisma.OrganizationUncheckedUpdateManyWithoutParentNestedInput
+  userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedUpdateManyWithoutOrganizationNestedInput
+  userClaims?: Prisma.UserClaimUncheckedUpdateManyWithoutOrganizationNestedInput
 }
 
 export type OrganizationCreateManyTenantInput = {
@@ -1990,6 +2189,7 @@ export type OrganizationUpdateWithoutTenantInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   parent?: Prisma.OrganizationUpdateOneWithoutChildrenNestedInput
   children?: Prisma.OrganizationUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUpdateManyWithoutOrganizationNestedInput
 }
@@ -2028,6 +2228,7 @@ export type OrganizationUncheckedUpdateWithoutTenantInput = {
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   children?: Prisma.OrganizationUncheckedUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUncheckedUpdateManyWithoutOrganizationNestedInput
 }
@@ -2136,6 +2337,7 @@ export type OrganizationUpdateWithoutParentInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrganizationsNestedInput
   children?: Prisma.OrganizationUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUpdateManyWithoutOrganizationNestedInput
 }
@@ -2174,6 +2376,7 @@ export type OrganizationUncheckedUpdateWithoutParentInput = {
   deletedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
   children?: Prisma.OrganizationUncheckedUpdateManyWithoutParentNestedInput
+  authorizationAudits?: Prisma.AuthorizationAuditUncheckedUpdateManyWithoutOrganizationNestedInput
   userOrganizationRoles?: Prisma.UserOrganizationRoleUncheckedUpdateManyWithoutOrganizationNestedInput
   userClaims?: Prisma.UserClaimUncheckedUpdateManyWithoutOrganizationNestedInput
 }
@@ -2220,12 +2423,14 @@ export type OrganizationUncheckedUpdateManyWithoutParentInput = {
 
 export type OrganizationCountOutputType = {
   children: number
+  authorizationAudits: number
   userOrganizationRoles: number
   userClaims: number
 }
 
 export type OrganizationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   children?: boolean | OrganizationCountOutputTypeCountChildrenArgs
+  authorizationAudits?: boolean | OrganizationCountOutputTypeCountAuthorizationAuditsArgs
   userOrganizationRoles?: boolean | OrganizationCountOutputTypeCountUserOrganizationRolesArgs
   userClaims?: boolean | OrganizationCountOutputTypeCountUserClaimsArgs
 }
@@ -2245,6 +2450,13 @@ export type OrganizationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types
  */
 export type OrganizationCountOutputTypeCountChildrenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.OrganizationWhereInput
+}
+
+/**
+ * OrganizationCountOutputType without action
+ */
+export type OrganizationCountOutputTypeCountAuthorizationAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuthorizationAuditWhereInput
 }
 
 /**
@@ -2299,6 +2511,7 @@ export type OrganizationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   parent?: boolean | Prisma.Organization$parentArgs<ExtArgs>
   children?: boolean | Prisma.Organization$childrenArgs<ExtArgs>
+  authorizationAudits?: boolean | Prisma.Organization$authorizationAuditsArgs<ExtArgs>
   userOrganizationRoles?: boolean | Prisma.Organization$userOrganizationRolesArgs<ExtArgs>
   userClaims?: boolean | Prisma.Organization$userClaimsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
@@ -2421,6 +2634,7 @@ export type OrganizationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   parent?: boolean | Prisma.Organization$parentArgs<ExtArgs>
   children?: boolean | Prisma.Organization$childrenArgs<ExtArgs>
+  authorizationAudits?: boolean | Prisma.Organization$authorizationAuditsArgs<ExtArgs>
   userOrganizationRoles?: boolean | Prisma.Organization$userOrganizationRolesArgs<ExtArgs>
   userClaims?: boolean | Prisma.Organization$userClaimsArgs<ExtArgs>
   _count?: boolean | Prisma.OrganizationCountOutputTypeDefaultArgs<ExtArgs>
@@ -2440,6 +2654,7 @@ export type $OrganizationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     tenant: Prisma.$TenantPayload<ExtArgs>
     parent: Prisma.$OrganizationPayload<ExtArgs> | null
     children: Prisma.$OrganizationPayload<ExtArgs>[]
+    authorizationAudits: Prisma.$AuthorizationAuditPayload<ExtArgs>[]
     userOrganizationRoles: Prisma.$UserOrganizationRolePayload<ExtArgs>[]
     userClaims: Prisma.$UserClaimPayload<ExtArgs>[]
   }
@@ -2874,6 +3089,7 @@ export interface Prisma__OrganizationClient<T, Null = never, ExtArgs extends run
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   parent<T extends Prisma.Organization$parentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$parentArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   children<T extends Prisma.Organization$childrenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  authorizationAudits<T extends Prisma.Organization$authorizationAuditsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$authorizationAuditsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthorizationAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userOrganizationRoles<T extends Prisma.Organization$userOrganizationRolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$userOrganizationRolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserOrganizationRolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userClaims<T extends Prisma.Organization$userClaimsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Organization$userClaimsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -3379,6 +3595,30 @@ export type Organization$childrenArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.OrganizationScalarFieldEnum | Prisma.OrganizationScalarFieldEnum[]
+}
+
+/**
+ * Organization.authorizationAudits
+ */
+export type Organization$authorizationAuditsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuthorizationAudit
+   */
+  select?: Prisma.AuthorizationAuditSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuthorizationAudit
+   */
+  omit?: Prisma.AuthorizationAuditOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationAuditInclude<ExtArgs> | null
+  where?: Prisma.AuthorizationAuditWhereInput
+  orderBy?: Prisma.AuthorizationAuditOrderByWithRelationInput | Prisma.AuthorizationAuditOrderByWithRelationInput[]
+  cursor?: Prisma.AuthorizationAuditWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuthorizationAuditScalarFieldEnum | Prisma.AuthorizationAuditScalarFieldEnum[]
 }
 
 /**

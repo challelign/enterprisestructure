@@ -47,6 +47,21 @@ export { Prisma }
  */
 export type Tenant = Prisma.TenantModel
 /**
+ * Model FeatureModule
+ * 
+ */
+export type FeatureModule = Prisma.FeatureModuleModel
+/**
+ * Model TenantModule
+ * 
+ */
+export type TenantModule = Prisma.TenantModuleModel
+/**
+ * Model ResourceClaim
+ * 
+ */
+export type ResourceClaim = Prisma.ResourceClaimModel
+/**
  * Model Organization
  * 
  */

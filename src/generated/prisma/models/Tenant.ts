@@ -20,8 +20,18 @@ export type TenantModel = runtime.Types.Result.DefaultSelection<Prisma.$TenantPa
 
 export type AggregateTenant = {
   _count: TenantCountAggregateOutputType | null
+  _avg: TenantAvgAggregateOutputType | null
+  _sum: TenantSumAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
   _max: TenantMaxAggregateOutputType | null
+}
+
+export type TenantAvgAggregateOutputType = {
+  version: number | null
+}
+
+export type TenantSumAggregateOutputType = {
+  version: number | null
 }
 
 export type TenantMinAggregateOutputType = {
@@ -29,6 +39,7 @@ export type TenantMinAggregateOutputType = {
   name: string | null
   code: string | null
   isActive: boolean | null
+  version: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +49,7 @@ export type TenantMaxAggregateOutputType = {
   name: string | null
   code: string | null
   isActive: boolean | null
+  version: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,17 +60,27 @@ export type TenantCountAggregateOutputType = {
   code: number
   isActive: number
   metadata: number
+  version: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
 
+export type TenantAvgAggregateInputType = {
+  version?: true
+}
+
+export type TenantSumAggregateInputType = {
+  version?: true
+}
+
 export type TenantMinAggregateInputType = {
   id?: true
   name?: true
   code?: true
   isActive?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -68,6 +90,7 @@ export type TenantMaxAggregateInputType = {
   name?: true
   code?: true
   isActive?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -78,6 +101,7 @@ export type TenantCountAggregateInputType = {
   code?: true
   isActive?: true
   metadata?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -121,6 +145,18 @@ export type TenantAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: TenantAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: TenantSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: TenantMinAggregateInputType
@@ -151,6 +187,8 @@ export type TenantGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: TenantCountAggregateInputType | true
+  _avg?: TenantAvgAggregateInputType
+  _sum?: TenantSumAggregateInputType
   _min?: TenantMinAggregateInputType
   _max?: TenantMaxAggregateInputType
 }
@@ -161,9 +199,12 @@ export type TenantGroupByOutputType = {
   code: string
   isActive: boolean
   metadata: runtime.JsonValue | null
+  version: number
   createdAt: Date
   updatedAt: Date
   _count: TenantCountAggregateOutputType | null
+  _avg: TenantAvgAggregateOutputType | null
+  _sum: TenantSumAggregateOutputType | null
   _min: TenantMinAggregateOutputType | null
   _max: TenantMaxAggregateOutputType | null
 }
@@ -192,12 +233,15 @@ export type TenantWhereInput = {
   code?: Prisma.StringFilter<"Tenant"> | string
   isActive?: Prisma.BoolFilter<"Tenant"> | boolean
   metadata?: Prisma.JsonNullableFilter<"Tenant">
+  version?: Prisma.IntFilter<"Tenant"> | number
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   organizations?: Prisma.OrganizationListRelationFilter
   users?: Prisma.UserListRelationFilter
   roles?: Prisma.RoleListRelationFilter
   permissions?: Prisma.PermissionListRelationFilter
+  tenantModules?: Prisma.TenantModuleListRelationFilter
+  policies?: Prisma.AuthorizationPolicyListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -206,12 +250,15 @@ export type TenantOrderByWithRelationInput = {
   code?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   organizations?: Prisma.OrganizationOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
   roles?: Prisma.RoleOrderByRelationAggregateInput
   permissions?: Prisma.PermissionOrderByRelationAggregateInput
+  tenantModules?: Prisma.TenantModuleOrderByRelationAggregateInput
+  policies?: Prisma.AuthorizationPolicyOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -223,12 +270,15 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Tenant"> | string
   isActive?: Prisma.BoolFilter<"Tenant"> | boolean
   metadata?: Prisma.JsonNullableFilter<"Tenant">
+  version?: Prisma.IntFilter<"Tenant"> | number
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   organizations?: Prisma.OrganizationListRelationFilter
   users?: Prisma.UserListRelationFilter
   roles?: Prisma.RoleListRelationFilter
   permissions?: Prisma.PermissionListRelationFilter
+  tenantModules?: Prisma.TenantModuleListRelationFilter
+  policies?: Prisma.AuthorizationPolicyListRelationFilter
 }, "id" | "code">
 
 export type TenantOrderByWithAggregationInput = {
@@ -237,11 +287,14 @@ export type TenantOrderByWithAggregationInput = {
   code?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
+  _avg?: Prisma.TenantAvgOrderByAggregateInput
   _max?: Prisma.TenantMaxOrderByAggregateInput
   _min?: Prisma.TenantMinOrderByAggregateInput
+  _sum?: Prisma.TenantSumOrderByAggregateInput
 }
 
 export type TenantScalarWhereWithAggregatesInput = {
@@ -253,6 +306,7 @@ export type TenantScalarWhereWithAggregatesInput = {
   code?: Prisma.StringWithAggregatesFilter<"Tenant"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"Tenant">
+  version?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
 }
@@ -263,12 +317,15 @@ export type TenantCreateInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   organizations?: Prisma.OrganizationCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -277,12 +334,15 @@ export type TenantUncheckedCreateInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleUncheckedCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -291,12 +351,15 @@ export type TenantUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizations?: Prisma.OrganizationUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -305,12 +368,15 @@ export type TenantUncheckedUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUncheckedUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -319,6 +385,7 @@ export type TenantCreateManyInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -329,6 +396,7 @@ export type TenantUpdateManyMutationInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -339,6 +407,7 @@ export type TenantUncheckedUpdateManyInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -349,8 +418,13 @@ export type TenantCountOrderByAggregateInput = {
   code?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type TenantAvgOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type TenantMaxOrderByAggregateInput = {
@@ -358,6 +432,7 @@ export type TenantMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -367,8 +442,13 @@ export type TenantMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   code?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type TenantSumOrderByAggregateInput = {
+  version?: Prisma.SortOrder
 }
 
 export type TenantScalarRelationFilter = {
@@ -384,8 +464,30 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type TenantCreateNestedOneWithoutTenantModulesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutTenantModulesInput, Prisma.TenantUncheckedCreateWithoutTenantModulesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutTenantModulesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutTenantModulesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutTenantModulesInput, Prisma.TenantUncheckedCreateWithoutTenantModulesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutTenantModulesInput
+  upsert?: Prisma.TenantUpsertWithoutTenantModulesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutTenantModulesInput, Prisma.TenantUpdateWithoutTenantModulesInput>, Prisma.TenantUncheckedUpdateWithoutTenantModulesInput>
 }
 
 export type TenantCreateNestedOneWithoutOrganizationsInput = {
@@ -444,17 +546,114 @@ export type TenantUpdateOneRequiredWithoutPermissionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPermissionsInput, Prisma.TenantUpdateWithoutPermissionsInput>, Prisma.TenantUncheckedUpdateWithoutPermissionsInput>
 }
 
+export type TenantCreateNestedOneWithoutPoliciesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutPoliciesInput, Prisma.TenantUncheckedCreateWithoutPoliciesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPoliciesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutPoliciesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutPoliciesInput, Prisma.TenantUncheckedCreateWithoutPoliciesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPoliciesInput
+  upsert?: Prisma.TenantUpsertWithoutPoliciesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPoliciesInput, Prisma.TenantUpdateWithoutPoliciesInput>, Prisma.TenantUncheckedUpdateWithoutPoliciesInput>
+}
+
+export type TenantCreateWithoutTenantModulesInput = {
+  id?: string
+  name: string
+  code: string
+  isActive?: boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizations?: Prisma.OrganizationCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  permissions?: Prisma.PermissionCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutTenantModulesInput = {
+  id?: string
+  name: string
+  code: string
+  isActive?: boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutTenantModulesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutTenantModulesInput, Prisma.TenantUncheckedCreateWithoutTenantModulesInput>
+}
+
+export type TenantUpsertWithoutTenantModulesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutTenantModulesInput, Prisma.TenantUncheckedUpdateWithoutTenantModulesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutTenantModulesInput, Prisma.TenantUncheckedCreateWithoutTenantModulesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutTenantModulesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutTenantModulesInput, Prisma.TenantUncheckedUpdateWithoutTenantModulesInput>
+}
+
+export type TenantUpdateWithoutTenantModulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizations?: Prisma.OrganizationUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  permissions?: Prisma.PermissionUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutTenantModulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  permissions?: Prisma.PermissionUncheckedUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUncheckedUpdateManyWithoutTenantNestedInput
+}
+
 export type TenantCreateWithoutOrganizationsInput = {
   id?: string
   name: string
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutOrganizationsInput = {
@@ -463,11 +662,14 @@ export type TenantUncheckedCreateWithoutOrganizationsInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleUncheckedCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutOrganizationsInput = {
@@ -492,11 +694,14 @@ export type TenantUpdateWithoutOrganizationsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutOrganizationsInput = {
@@ -505,11 +710,14 @@ export type TenantUncheckedUpdateWithoutOrganizationsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUncheckedUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutUsersInput = {
@@ -518,11 +726,14 @@ export type TenantCreateWithoutUsersInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   organizations?: Prisma.OrganizationCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -531,11 +742,14 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleUncheckedCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -560,11 +774,14 @@ export type TenantUpdateWithoutUsersInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizations?: Prisma.OrganizationUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -573,11 +790,14 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUncheckedUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutRolesInput = {
@@ -586,11 +806,14 @@ export type TenantCreateWithoutRolesInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   organizations?: Prisma.OrganizationCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   permissions?: Prisma.PermissionCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutRolesInput = {
@@ -599,11 +822,14 @@ export type TenantUncheckedCreateWithoutRolesInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleUncheckedCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutRolesInput = {
@@ -628,11 +854,14 @@ export type TenantUpdateWithoutRolesInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizations?: Prisma.OrganizationUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   permissions?: Prisma.PermissionUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutRolesInput = {
@@ -641,11 +870,14 @@ export type TenantUncheckedUpdateWithoutRolesInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   permissions?: Prisma.PermissionUncheckedUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUncheckedUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPermissionsInput = {
@@ -654,11 +886,14 @@ export type TenantCreateWithoutPermissionsInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   organizations?: Prisma.OrganizationCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPermissionsInput = {
@@ -667,11 +902,14 @@ export type TenantUncheckedCreateWithoutPermissionsInput = {
   code: string
   isActive?: boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
   roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleUncheckedCreateNestedManyWithoutTenantInput
+  policies?: Prisma.AuthorizationPolicyUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPermissionsInput = {
@@ -696,11 +934,14 @@ export type TenantUpdateWithoutPermissionsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizations?: Prisma.OrganizationUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPermissionsInput = {
@@ -709,11 +950,94 @@ export type TenantUncheckedUpdateWithoutPermissionsInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
   roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUncheckedUpdateManyWithoutTenantNestedInput
+  policies?: Prisma.AuthorizationPolicyUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutPoliciesInput = {
+  id?: string
+  name: string
+  code: string
+  isActive?: boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizations?: Prisma.OrganizationCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleCreateNestedManyWithoutTenantInput
+  permissions?: Prisma.PermissionCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutPoliciesInput = {
+  id?: string
+  name: string
+  code: string
+  isActive?: boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizations?: Prisma.OrganizationUncheckedCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutTenantInput
+  permissions?: Prisma.PermissionUncheckedCreateNestedManyWithoutTenantInput
+  tenantModules?: Prisma.TenantModuleUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutPoliciesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutPoliciesInput, Prisma.TenantUncheckedCreateWithoutPoliciesInput>
+}
+
+export type TenantUpsertWithoutPoliciesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutPoliciesInput, Prisma.TenantUncheckedUpdateWithoutPoliciesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutPoliciesInput, Prisma.TenantUncheckedCreateWithoutPoliciesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutPoliciesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutPoliciesInput, Prisma.TenantUncheckedUpdateWithoutPoliciesInput>
+}
+
+export type TenantUpdateWithoutPoliciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizations?: Prisma.OrganizationUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutTenantNestedInput
+  permissions?: Prisma.PermissionUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutPoliciesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizations?: Prisma.OrganizationUncheckedUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutTenantNestedInput
+  permissions?: Prisma.PermissionUncheckedUpdateManyWithoutTenantNestedInput
+  tenantModules?: Prisma.TenantModuleUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -726,6 +1050,8 @@ export type TenantCountOutputType = {
   users: number
   roles: number
   permissions: number
+  tenantModules: number
+  policies: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -733,6 +1059,8 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   users?: boolean | TenantCountOutputTypeCountUsersArgs
   roles?: boolean | TenantCountOutputTypeCountRolesArgs
   permissions?: boolean | TenantCountOutputTypeCountPermissionsArgs
+  tenantModules?: boolean | TenantCountOutputTypeCountTenantModulesArgs
+  policies?: boolean | TenantCountOutputTypeCountPoliciesArgs
 }
 
 /**
@@ -773,6 +1101,20 @@ export type TenantCountOutputTypeCountPermissionsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.PermissionWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountTenantModulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TenantModuleWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountPoliciesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuthorizationPolicyWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -780,12 +1122,15 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   code?: boolean
   isActive?: boolean
   metadata?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   organizations?: boolean | Prisma.Tenant$organizationsArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   roles?: boolean | Prisma.Tenant$rolesArgs<ExtArgs>
   permissions?: boolean | Prisma.Tenant$permissionsArgs<ExtArgs>
+  tenantModules?: boolean | Prisma.Tenant$tenantModulesArgs<ExtArgs>
+  policies?: boolean | Prisma.Tenant$policiesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -795,6 +1140,7 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   code?: boolean
   isActive?: boolean
   metadata?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["tenant"]>
@@ -805,6 +1151,7 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   code?: boolean
   isActive?: boolean
   metadata?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["tenant"]>
@@ -815,16 +1162,19 @@ export type TenantSelectScalar = {
   code?: boolean
   isActive?: boolean
   metadata?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "isActive" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "code" | "isActive" | "metadata" | "version" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizations?: boolean | Prisma.Tenant$organizationsArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   roles?: boolean | Prisma.Tenant$rolesArgs<ExtArgs>
   permissions?: boolean | Prisma.Tenant$permissionsArgs<ExtArgs>
+  tenantModules?: boolean | Prisma.Tenant$tenantModulesArgs<ExtArgs>
+  policies?: boolean | Prisma.Tenant$policiesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -837,6 +1187,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     users: Prisma.$UserPayload<ExtArgs>[]
     roles: Prisma.$RolePayload<ExtArgs>[]
     permissions: Prisma.$PermissionPayload<ExtArgs>[]
+    tenantModules: Prisma.$TenantModulePayload<ExtArgs>[]
+    policies: Prisma.$AuthorizationPolicyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -844,6 +1196,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     code: string
     isActive: boolean
     metadata: runtime.JsonValue | null
+    version: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["tenant"]>
@@ -1244,6 +1597,8 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   users<T extends Prisma.Tenant$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roles<T extends Prisma.Tenant$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   permissions<T extends Prisma.Tenant$permissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$permissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PermissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tenantModules<T extends Prisma.Tenant$tenantModulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$tenantModulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TenantModulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  policies<T extends Prisma.Tenant$policiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$policiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthorizationPolicyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1278,6 +1633,7 @@ export interface TenantFieldRefs {
   readonly code: Prisma.FieldRef<"Tenant", 'String'>
   readonly isActive: Prisma.FieldRef<"Tenant", 'Boolean'>
   readonly metadata: Prisma.FieldRef<"Tenant", 'Json'>
+  readonly version: Prisma.FieldRef<"Tenant", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
 }
@@ -1766,6 +2122,54 @@ export type Tenant$permissionsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.PermissionScalarFieldEnum | Prisma.PermissionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.tenantModules
+ */
+export type Tenant$tenantModulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TenantModule
+   */
+  select?: Prisma.TenantModuleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TenantModule
+   */
+  omit?: Prisma.TenantModuleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TenantModuleInclude<ExtArgs> | null
+  where?: Prisma.TenantModuleWhereInput
+  orderBy?: Prisma.TenantModuleOrderByWithRelationInput | Prisma.TenantModuleOrderByWithRelationInput[]
+  cursor?: Prisma.TenantModuleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TenantModuleScalarFieldEnum | Prisma.TenantModuleScalarFieldEnum[]
+}
+
+/**
+ * Tenant.policies
+ */
+export type Tenant$policiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuthorizationPolicy
+   */
+  select?: Prisma.AuthorizationPolicySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuthorizationPolicy
+   */
+  omit?: Prisma.AuthorizationPolicyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuthorizationPolicyInclude<ExtArgs> | null
+  where?: Prisma.AuthorizationPolicyWhereInput
+  orderBy?: Prisma.AuthorizationPolicyOrderByWithRelationInput | Prisma.AuthorizationPolicyOrderByWithRelationInput[]
+  cursor?: Prisma.AuthorizationPolicyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuthorizationPolicyScalarFieldEnum | Prisma.AuthorizationPolicyScalarFieldEnum[]
 }
 
 /**
