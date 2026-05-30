@@ -3,11 +3,17 @@ export class ApiResponse<T> {
     public success: boolean,
     public message: string,
     public data?: T,
-    public meta?: unknown
+    public meta?: any
   ) {}
+
+  static success<T>(data: T, message = "Success") {
+    return new ApiResponse(true, message, data);
+  }
+
+  static error(message = "Error", meta?: any) {
+    return new ApiResponse(false, message, undefined, meta);
+  }
 }
-
-
 
 // {
 //   "success": true,
