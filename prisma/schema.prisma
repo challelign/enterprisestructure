@@ -11,6 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
 // ======================================================
 // ENUMS
 // ======================================================
@@ -97,17 +98,14 @@ model Tenant {
   updatedAt DateTime @updatedAt
 
   organizations Organization[]
-  
-  
-  users         User[]
-  roles         Role[]
-  permissions   Permission[]
+
+  users       User[]
+  roles       Role[]
+  permissions Permission[]
 
   tenantModules TenantModule[]
   policies      AuthorizationPolicy[]
 }
-
-
 
 model FeatureModule {
   id String @id @default(uuid())
@@ -133,17 +131,14 @@ model FeatureModule {
   @@index([code])
 }
 
-
-
-
 model TenantModule {
   id String @id @default(uuid())
 
   tenantId String
-  tenant Tenant @relation(fields: [tenantId], references: [id])
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
 
   moduleId String
-  module FeatureModule @relation(fields: [moduleId], references: [id])
+  module   FeatureModule @relation(fields: [moduleId], references: [id])
 
   isEnabled Boolean @default(true)
 
@@ -154,12 +149,9 @@ model TenantModule {
   settings Json?
 
   @@unique([tenantId, moduleId])
-
   @@index([tenantId])
   @@index([moduleId])
 }
-
-
 
 model ResourceClaim {
   id String @id @default(uuid())
@@ -167,11 +159,11 @@ model ResourceClaim {
   tenantId String
 
   resourceType String
-  resourceId String
+  resourceId   String
 
   organizationId String?
 
-  claimType String
+  claimType  String
   claimValue String
 
   metadata Json?
@@ -203,14 +195,14 @@ model Organization {
   // Hierarchy
   parentId String?
 
-  parent Organization? @relation( "OrganizationHierarchy", fields: [parentId], references: [id] )
+  parent Organization? @relation("OrganizationHierarchy", fields: [parentId], references: [id])
 
   children Organization[] @relation("OrganizationHierarchy")
 
-  hierarchyPath  String
-  hierarchyLevel Int    @default(0)
+  hierarchyPath       String
+  hierarchyLevel      Int                  @default(0)
   authorizationAudits AuthorizationAudit[]
-  organizationType OrganizationType
+  organizationType    OrganizationType
 
   // Status
   isActive Boolean @default(true)
@@ -480,14 +472,9 @@ model Role {
   // Role Hierarchy
   hierarchyLevel Int
 
- 
+  inheritsFromId String?
 
- 
-inheritsFromId String?
-
-inheritsFrom Role? @relation(  "RoleHierarchy",  fields: [inheritsFromId],  references: [id])
-
- 
+  inheritsFrom Role? @relation("RoleHierarchy", fields: [inheritsFromId], references: [id])
 
   inheritedRoles Role[] @relation("RoleHierarchy")
 
@@ -674,14 +661,14 @@ model AuthorizationPolicy {
   id String @id @default(uuid())
 
   tenantId String
-  tenant Tenant @relation(fields: [tenantId], references: [id])
+  tenant   Tenant @relation(fields: [tenantId], references: [id])
 
   name String
 
   policyKey String @unique
 
   resource String
-  action String
+  action   String
 
   effect PermissionEffect
 
@@ -704,6 +691,7 @@ model AuthorizationPolicy {
   @@index([tenantId])
   @@index([policyKey])
 }
+
 // ======================================================
 // AUTHORIZATION AUDIT
 // ======================================================
@@ -732,7 +720,7 @@ model AuthorizationAudit {
 
   organizationId String?
 
-  organization Organization? @relation(  fields: [organizationId],  references: [id])
+  organization Organization? @relation(fields: [organizationId], references: [id])
 
   metadata Json?
 
@@ -743,5 +731,3 @@ model AuthorizationAudit {
   @@index([resourceType])
   @@index([createdAt])
 }
-
- 
