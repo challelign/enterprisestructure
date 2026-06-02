@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { LogoutSchema } from "@/modules/auth/dto/logout.dto";
 
 import { AuthService } from "@/modules/auth/services/auth.service";
+import { apiHandler } from "@/shared/utils/api-handler";
 
 const authService = new AuthService();
 /**
@@ -19,11 +20,11 @@ const authService = new AuthService();
 }
  */
 export async function POST(request: NextRequest) {
-  const body = await request.json();
+  return apiHandler(async () => {
+    const body = await request.json();
 
-  const dto = LogoutSchema.parse(body);
+    const dto = LogoutSchema.parse(body);
 
-  const result = await authService.logout(dto.sessionId);
-
-  return NextResponse.json(result);
+    return await authService.logout(dto.sessionId);
+  });
 }

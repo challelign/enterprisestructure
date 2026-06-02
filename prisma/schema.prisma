@@ -613,7 +613,7 @@ model UserOrganizationRole {
 
   metadata Json?
 
-  @@unique([userId, organizationId, roleId])
+  @@unique([userId, organizationId, roleId]) // this automaticaly creates this userId_organizationId_roleId
   @@index([tenantId])
   @@index([userId])
   @@index([organizationId])
