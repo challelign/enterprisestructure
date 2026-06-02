@@ -1,4 +1,4 @@
-import { SignJWT } from "jose";
+import { jwtVerify, SignJWT } from "jose";
 
 const encoder = new TextEncoder();
 
@@ -21,5 +21,21 @@ export class JwtService {
       .setIssuedAt()
       .setExpirationTime("30d")
       .sign(encoder.encode(process.env.JWT_REFRESH_SECRET!));
+  }
+
+  async verifyRefreshToken(token: string) {
+    const secret = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET);
+
+    const result = await jwtVerify(token, secret);
+
+    return result.payload;
+  }
+
+  async verifyAccessToken(token: string) {
+    const secret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET);
+
+    const result = await jwtVerify(token, secret);
+
+    return result.payload;
   }
 }
