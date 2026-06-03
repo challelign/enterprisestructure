@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     const ipAddress = forwardedFor?.split(",")[0]?.trim();
 
-    return authService.login(dto.tenantCode, dto.email, dto.password, {
+    return await authService.login(dto.tenantCode, dto.email, dto.password, {
       ipAddress,
       userAgent,
     });
