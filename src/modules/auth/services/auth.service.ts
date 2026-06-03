@@ -7,6 +7,11 @@ import { SessionRepository } from "../repositories/session.repository";
 import { SessionContext } from "../types/session-context";
 import { GeoLocationService } from "./geo-location.service";
 import { parseUserAgent } from "../utils/device-parser";
+import { AuthLogger } from "@/core/logging/auth-logger";
+import { AuthorizationAuditService } from "@/modules/authorization/services/authorization-audit.service";
+import { ErrorLogger } from "@/core/logging/error-logger";
+import { AuditPayload } from "@/modules/authorization/types/audit-payload";
+import { AuditActionType } from "@/generated/prisma/enums";
 
 export class AuthService {
   private repo = new AuthRepository();
@@ -17,6 +22,20 @@ export class AuthService {
 
   private sessionRepo = new SessionRepository();
   private geoLocationService = new GeoLocationService();
+
+  private authorizationAuditService = new AuthorizationAuditService();
+
+  // =====================================
+  // SAFE AUDIT HELPER
+  // =====================================
+
+  private async safeAudit(payload: AuditPayload) {
+    try {
+      await this.authorizationAuditService.writeAudit(payload);
+    } catch (error) {
+      ErrorLogger.error("Authorization audit failed", error);
+    }
+  }
 
   async login(
     tenantCode: string,
@@ -33,6 +52,17 @@ export class AuthService {
     const user = await this.repo.findUserByEmail(email);
 
     if (!user) {
+      AuthLogger.loginFailed(email, "User not found");
+
+      await this.safeAudit({
+        tenantId: tenant.id,
+        actionType: AuditActionType.LOGIN,
+        granted: false,
+        reason: "User not found",
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+      });
+
       throw new UnauthorizedError("Invalid credentials");
     }
 
@@ -40,8 +70,19 @@ export class AuthService {
       password,
       user.passwordHash,
     );
-
     if (!validPassword) {
+      AuthLogger.loginFailed(email, "Wrong password");
+
+      await this.safeAudit({
+        tenantId: tenant.id,
+        userId: user.id,
+        actionType: AuditActionType.LOGIN,
+        granted: false,
+        reason: "Wrong password",
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+      });
+
       throw new UnauthorizedError("Invalid credentials");
     }
 
@@ -90,6 +131,22 @@ export class AuthService {
       expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     });
 
+    await this.safeAudit({
+      tenantId: tenant.id,
+      userId: user.id,
+      actionType: AuditActionType.LOGIN,
+      granted: true,
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+      metadata: {
+        browser: deviceInfo.browser,
+        operatingSystem: deviceInfo.operatingSystem,
+        country: location.country,
+        city: location.city,
+      },
+    });
+
+    AuthLogger.loginSuccess(user.id, user.email);
     return {
       accessToken,
       refreshToken,
@@ -131,7 +188,6 @@ export class AuthService {
 
   async logout(sessionId: string) {
     await this.sessionRepo.revoke(sessionId);
-
     return {
       success: true,
       message: "Logged out successfully",

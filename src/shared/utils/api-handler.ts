@@ -34,6 +34,7 @@
 
 import { ZodError } from "zod";
 import { errorResponse, successResponse } from "./api-response";
+import { ErrorLogger } from "../../core/logging/error-logger";
 
 export async function apiHandler(callback: () => Promise<any>) {
   try {
@@ -41,8 +42,8 @@ export async function apiHandler(callback: () => Promise<any>) {
 
     return successResponse(result);
   } catch (error: any) {
-    console.error("API ERROR:", error);
-
+    // console.error("API ERROR:", error);
+    ErrorLogger.error("Unhandled API Error", error);
     // Zod validation
     if (error instanceof ZodError) {
       return errorResponse("Validation failed", 422, error.flatten());
