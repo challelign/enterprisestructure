@@ -12,6 +12,7 @@ import { AuthorizationAuditService } from "@/modules/authorization/services/auth
 import { ErrorLogger } from "@/core/logging/error-logger";
 import { AuditPayload } from "@/modules/authorization/types/audit-payload";
 import { AuditActionType } from "@/generated/prisma/enums";
+import { AuditService } from "@/modules/audit/services/audit.service";
 
 export class AuthService {
   private repo = new AuthRepository();
@@ -23,17 +24,17 @@ export class AuthService {
   private sessionRepo = new SessionRepository();
   private geoLocationService = new GeoLocationService();
 
-  private authorizationAuditService = new AuthorizationAuditService();
-
+  // private authorizationAuditService = new AuthorizationAuditService();
+  private auditService = new AuditService();
   // =====================================
   // SAFE AUDIT HELPER
   // =====================================
 
   private async safeAudit(payload: AuditPayload) {
     try {
-      await this.authorizationAuditService.writeAudit(payload);
+      await this.auditService.log(payload);
     } catch (error) {
-      ErrorLogger.error("Authorization audit failed", error);
+      ErrorLogger.error("Audit logging failed", error);
     }
   }
 
@@ -44,6 +45,9 @@ export class AuthService {
     context: SessionContext,
   ) {
     const tenant = await this.repo.findTenantByCode(tenantCode);
+    const deviceInfo = parseUserAgent(context.userAgent);
+
+    const location = await this.geoLocationService.lookup(context.ipAddress);
 
     if (!tenant) {
       throw new UnauthorizedError("Tenant not found");
@@ -53,7 +57,6 @@ export class AuthService {
 
     if (!user) {
       AuthLogger.loginFailed(email, "User not found");
-
       await this.safeAudit({
         tenantId: tenant.id,
         actionType: AuditActionType.LOGIN,
@@ -61,6 +64,9 @@ export class AuthService {
         reason: "User not found",
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
+        metadata: {
+          email,
+        },
       });
 
       throw new UnauthorizedError("Invalid credentials");
@@ -81,14 +87,14 @@ export class AuthService {
         reason: "Wrong password",
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
+        metadata: {
+          email: user.email,
+          browser: deviceInfo?.browser,
+          operatingSystem: deviceInfo?.operatingSystem,
+        },
       });
-
       throw new UnauthorizedError("Invalid credentials");
     }
-
-    const deviceInfo = parseUserAgent(context.userAgent);
-
-    const location = await this.geoLocationService.lookup(context.ipAddress);
 
     const accessToken = await this.jwtService.generateAccessToken({
       userId: user.id,
@@ -136,11 +142,14 @@ export class AuthService {
       userId: user.id,
       actionType: AuditActionType.LOGIN,
       granted: true,
+      reason: "Login successful",
       ipAddress: context.ipAddress,
       userAgent: context.userAgent,
       metadata: {
         browser: deviceInfo.browser,
         operatingSystem: deviceInfo.operatingSystem,
+        deviceName: deviceInfo.deviceName,
+        deviceType: deviceInfo.deviceType,
         country: location.country,
         city: location.city,
       },
@@ -162,6 +171,16 @@ export class AuthService {
     const session = await this.sessionRepo.findByRefreshTokenHash(hashedToken);
 
     if (!session) {
+      await this.safeAudit({
+        tenantId: "unknown",
+
+        actionType: AuditActionType.LOGIN,
+
+        granted: false,
+
+        reason: "Refresh token expired",
+      });
+
       throw new UnauthorizedError("Session expired");
     }
 
@@ -180,22 +199,70 @@ export class AuthService {
       hashToken(newRefreshToken),
     );
 
+    await this.safeAudit({
+      tenantId: session.tenantId,
+      userId: session.userId,
+      actionType: AuditActionType.LOGIN,
+      granted: true,
+      reason: "Token refreshed",
+      ipAddress: session?.ipAddress,
+      userAgent: session?.userAgent,
+      metadata: {
+        browser: session.browser,
+        operatingSystem: session.operatingSystem,
+        deviceName: session.deviceName,
+        deviceType: session.deviceType,
+        country: session.country,
+        city: session.city,
+      },
+    });
+
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
     };
   }
-
   async logout(sessionId: string) {
-    await this.sessionRepo.revoke(sessionId);
+    const session = await this.sessionRepo.revoke(sessionId);
+
+    if (!session) {
+      throw new UnauthorizedError("Session not found");
+    }
+
+    await this.safeAudit({
+      tenantId: session.tenantId,
+      userId: session.userId,
+      actionType: AuditActionType.LOGOUT,
+      granted: true,
+      reason: "User logout",
+      ipAddress: session?.ipAddress,
+      userAgent: session?.userAgent ,
+      metadata: {
+        browser: session.browser,
+        operatingSystem: session.operatingSystem,
+        deviceName: session.deviceName,
+        deviceType: session.deviceType,
+        country: session.country,
+        city: session.city,
+      },
+    });
+
     return {
       success: true,
       message: "Logged out successfully",
     };
   }
 
-  async logoutAllDevices(userId: string) {
+  async logoutAllDevices(userId: string, tenantId: string) {
     await this.sessionRepo.revokeAllUserSessions(userId);
+
+    await this.safeAudit({
+      tenantId,
+      userId,
+      actionType: "LOGOUT",
+      granted: true,
+      reason: "Logout all devices",
+    });
 
     return {
       success: true,

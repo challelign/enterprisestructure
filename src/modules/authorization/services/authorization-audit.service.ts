@@ -1,10 +1,11 @@
-import { AuthorizationAuditRepository } from "../repositories/authorization-audit.repository";
+import { AuditService } from "@/modules/audit/services/audit.service"; 
 import { AuditPayload } from "../types/audit-payload";
 
 export class AuthorizationAuditService {
-  constructor(private repository = new AuthorizationAuditRepository()) {}
+private auditService =
+  new AuditService();
 
   async writeAudit(payload: AuditPayload) {
-    return this.repository.create(payload);
+    return await this.auditService.log(payload);
   }
 }

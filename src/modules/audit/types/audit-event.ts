@@ -1,16 +1,27 @@
 import { AuditActionType } from "@/generated/prisma/enums";
 
-export interface AuditPayload {
+export interface AuditEvent {
   tenantId: string;
+
   userId?: string;
+
   actionType: AuditActionType;
+
   resourceType?: string;
+
   resourceId?: string;
+
   permissionRequired?: string;
-  granted: boolean;
+
+  granted?: boolean;
+
   reason?: string;
-  ipAddress?: string | null;
-  userAgent?: string | null;
-  organizationId?: string | null;
-  metadata?: {} | Record<string, unknown>;
+
+  ipAddress?: string;
+
+  userAgent?: string;
+
+  organizationId?: string;
+
+  metadata?: Record<string, unknown>;
 }

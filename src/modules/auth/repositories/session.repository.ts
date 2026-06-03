@@ -50,7 +50,7 @@ export class SessionRepository {
   async revokeAllUserSessions(userId: string) {
     return prisma.userSession.updateMany({
       where: {
-        userId,
+        userId, 
         isActive: true,
       },
       data: {
