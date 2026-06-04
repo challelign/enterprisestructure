@@ -1,25 +1,16 @@
 export class AppError extends Error {
   constructor(
-    public statusCode: number,
     message: string,
+    public statusCode = 500,
+    public errors?: unknown
   ) {
     super(message);
-  }
-}
 
-export class NotFoundError extends AppError {
-  constructor(message = "Not Found") {
-    super(404, message);
-  }
-}
-export class UnauthorizedError extends AppError {
-  constructor(message = "Unauthorized") {
-    super(401, message);
-  }
-}
+    this.name = this.constructor.name;
 
-export class ValidationError extends AppError {
-  constructor(message = "Validation Error") {
-    super(400, message);
+    Object.setPrototypeOf(
+      this,
+      new.target.prototype
+    );
   }
 }

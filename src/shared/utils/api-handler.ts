@@ -31,7 +31,7 @@
 //     return errorResponse("Internal Server Error", 500);
 //   }
 // }
-
+import { errors } from "jose";
 import { ZodError } from "zod";
 import { errorResponse, successResponse } from "./api-response";
 import { ErrorLogger } from "../../core/logging/error-logger";
@@ -47,6 +47,21 @@ export async function apiHandler(callback: () => Promise<any>) {
     // Zod validation
     if (error instanceof ZodError) {
       return errorResponse("Validation failed", 422, error.flatten());
+    }
+
+    // JWT expired
+    if (error instanceof errors.JWTExpired) {
+      return errorResponse("Token expired", 401);
+    }
+
+    // Invalid JWT
+    if (error instanceof errors.JWTInvalid) {
+      return errorResponse("Invalid token", 401);
+    }
+
+    // Any other JOSE error
+    if (error instanceof errors.JOSEError) {
+      return errorResponse("Unauthorized", 401);
     }
 
     // ✅ STRUCTURAL CHECK (THIS IS THE FIX)
