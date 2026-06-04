@@ -10,5 +10,5 @@ export const Roles = {
 
 export const ADMIN_BYPASS_ROLES = [
   Roles.SUPER_ADMIN,
-  Roles.SYSTEM_ADMIN,
+  // Roles.SYSTEM_ADMIN,
 ] as const;

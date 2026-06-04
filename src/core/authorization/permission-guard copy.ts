@@ -64,10 +64,6 @@ import { CurrentUser } from "@/core/auth/current-user";
 
 import { Roles, ADMIN_BYPASS_ROLES } from "./roles.constants";
 
-// ====================================
-// ONLY SUPER ADMIN BYPASS
-// ====================================
-
 function hasBypassRole(currentUser: CurrentUser) {
   return currentUser.roles.some((role) =>
     ADMIN_BYPASS_ROLES.includes(role as (typeof ADMIN_BYPASS_ROLES)[number]),
@@ -143,54 +139,3 @@ export function requireAllPermissions(
     throw new ForbiddenError("Missing required permissions");
   }
 }
-
-/*
-export function requirePermission(
-  currentUser: CurrentUser,
-  permission: string,
-) {
-  // ONLY SUPER ADMIN BYPASS
-  if (currentUser.roles.includes("super_admin")) {
-    return;
-  }
-
-  const hasPermission = currentUser.permissions.includes(permission);
-
-  if (!hasPermission) {
-    throw new ForbiddenError(`Missing permission: ${permission}`);
-  }
-}
-export function requireAnyPermission(
-  currentUser: CurrentUser,
-  permissions: string[],
-) {
-  if (currentUser.roles.includes("super_admin")) {
-    return;
-  }
-
-  const hasPermission = permissions.some((permission) =>
-    currentUser.permissions.includes(permission),
-  );
-
-  if (!hasPermission) {
-    throw new ForbiddenError("Missing required permissions");
-  }
-}
-export function requireAllPermissions(
-  currentUser: CurrentUser,
-  permissions: string[],
-) {
-  if (currentUser.roles.includes("super_admin")) {
-    return;
-  }
-
-  const hasAllPermissions = permissions.every((permission) =>
-    currentUser.permissions.includes(permission),
-  );
-
-  if (!hasAllPermissions) {
-    throw new ForbiddenError("Missing required permissions");
-  }
-}
-
-*/

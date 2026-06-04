@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   return apiHandler(async () => {
     const currentUser = await authenticate(request);
 
-    requirePermission(currentUser, Permissions.ROLE_CREATE); 
+    requirePermission(currentUser, Permissions.ROLE_CREATE);
     return {
       success: true,
       message: "Permission check passed",

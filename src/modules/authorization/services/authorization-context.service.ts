@@ -1,5 +1,6 @@
 import { AuthRepository } from "@/modules/auth/repositories/auth.repository";
 
+/*
 export class AuthorizationContextService {
   private repo = new AuthRepository();
 
@@ -34,6 +35,50 @@ export class AuthorizationContextService {
       roles,
       organizations,
       permissions,
+    };
+  }
+}
+*/
+
+export class AuthorizationContextService {
+  private repo = new AuthRepository();
+
+  async build(userId: string) {
+    const user = await this.repo.findUserForAuthorization(userId);
+
+    if (!user) {
+      return null;
+    }
+
+    const roles = [
+      ...new Set(user.organizationRoles.map((x) => x.role.roleKey)),
+    ];
+
+    const organizations = [
+      ...new Set(user.organizationRoles.map((x) => x.organizationId)),
+    ];
+
+    const permissions = [
+      ...new Set(
+        user.organizationRoles.flatMap((x) =>
+          x.role.permissions.map((p) => p.permission.permissionKey),
+        ),
+      ),
+    ];
+
+    // const isSystemAdmin = user.organizationRoles.some(
+    //   (x) => x.role.isSystemRole,
+    // );
+
+    return {
+      userId: user.id,
+      tenantId: user.tenantId,
+      email: user.email,
+      profile: user.profile,
+      roles,
+      organizations,
+      permissions,
+      // isSystemAdmin,
     };
   }
 }
