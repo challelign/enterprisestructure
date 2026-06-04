@@ -31,4 +31,47 @@ export class AuthRepository {
       },
     });
   }
+
+  /**
+   * 
+   * @param userId
+   * 
+   * User
+   *    └── Roles
+             └── Permissions
+    User
+      └── Organizations
+   * @returns 
+   */
+  async findUserForAuthorization(userId: string) {
+    return prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+
+      include: {
+        tenant: true,
+        profile:true,
+
+        organizationRoles: {
+          where: {
+            isActive: true,
+          },
+
+          include: {
+            organization: true,
+            role: {
+              include: {
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 }

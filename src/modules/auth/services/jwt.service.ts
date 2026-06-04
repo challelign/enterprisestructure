@@ -1,4 +1,5 @@
 import { jwtVerify, SignJWT } from "jose";
+import { JwtPayloadData } from "../types/jwt-payload";
 
 const encoder = new TextEncoder();
 
@@ -23,19 +24,16 @@ export class JwtService {
       .sign(encoder.encode(process.env.JWT_REFRESH_SECRET!));
   }
 
-  async verifyRefreshToken(token: string) {
+  async verifyRefreshToken(token: string): Promise<JwtPayloadData> {
     const secret = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET);
-
     const result = await jwtVerify(token, secret);
-
-    return result.payload;
+    return result.payload as JwtPayloadData;
   }
 
-  async verifyAccessToken(token: string) {
+  async verifyAccessToken(token: string): Promise<JwtPayloadData> {
     const secret = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET);
-
     const result = await jwtVerify(token, secret);
 
-    return result.payload;
+    return result.payload as JwtPayloadData;
   }
 }
