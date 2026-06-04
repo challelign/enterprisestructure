@@ -11,7 +11,7 @@ import { AuthLogger } from "@/core/logging/auth-logger";
 import { AuthorizationAuditService } from "@/modules/authorization/services/authorization-audit.service";
 import { ErrorLogger } from "@/core/logging/error-logger";
 import { AuditPayload } from "@/modules/authorization/types/audit-payload";
-import { AuditActionType } from "@/generated/prisma/enums";
+import { AccountStatus, AuditActionType } from "@/generated/prisma/enums";
 import { AuditService } from "@/modules/audit/services/audit.service";
 
 export class AuthService {
@@ -38,27 +38,21 @@ export class AuthService {
     }
   }
 
-  async login(
-    tenantCode: string,
-    email: string,
-    password: string,
-    context: SessionContext,
-  ) {
-    const tenant = await this.repo.findTenantByCode(tenantCode);
+  async login(email: string, password: string, context: SessionContext) {
+    // const tenant = await this.repo.findTenantByCode(tenantCode);
     const deviceInfo = parseUserAgent(context.userAgent);
 
     const location = await this.geoLocationService.lookup(context.ipAddress);
 
-    if (!tenant) {
-      throw new UnauthorizedError("Tenant not found");
-    }
+    // if (!tenant) {
+    //   throw new UnauthorizedError("Tenant not found");
+    // }
 
     const user = await this.repo.findUserByEmail(email);
-
     if (!user) {
       AuthLogger.loginFailed(email, "User not found");
       await this.safeAudit({
-        tenantId: tenant.id,
+        tenantId: "unknown",
         actionType: AuditActionType.LOGIN,
         granted: false,
         reason: "User not found",
@@ -72,6 +66,70 @@ export class AuthService {
       throw new UnauthorizedError("Invalid credentials");
     }
 
+    // const tenant = await this.repo.findTenantById(user.tenantId);
+    // if (!tenant) {
+    //   throw new UnauthorizedError("Tenant not found");
+    // }
+    if (!user.isActive) {
+       await this.safeAudit({
+        tenantId: "unknown",
+        actionType: AuditActionType.LOGIN,
+        granted: false,
+        reason: "User is inactive",
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+        metadata: {
+          email,
+        },
+      });
+      throw new UnauthorizedError("Account disabled");
+    }
+
+    if (user.isDeleted) {
+      await this.safeAudit({
+        tenantId: "unknown",
+        actionType: AuditActionType.LOGIN,
+        granted: false,
+        reason: "User is deleted",
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+        metadata: {
+          email,
+        },
+      });
+      throw new UnauthorizedError("Account disabled");
+    }
+
+    if (user.isLocked) {
+      await this.safeAudit({
+        tenantId: "unknown",
+        actionType: AuditActionType.LOGIN,
+        granted: false,
+        reason: "User is locked",
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+        metadata: {
+          email,
+        },
+      });
+      throw new UnauthorizedError("Account locked");
+    }
+
+    if (user.accountStatus !== AccountStatus.ACTIVE) {
+      await this.safeAudit({
+        tenantId: "unknown",
+        actionType: AuditActionType.LOGIN,
+        granted: false,
+        reason: "Account inactive",
+        ipAddress: context.ipAddress,
+        userAgent: context.userAgent,
+        metadata: {
+          email,
+        },
+      });
+      throw new UnauthorizedError("Account inactive");
+    }
+
     const validPassword = await this.passwordService.verify(
       password,
       user.passwordHash,
@@ -80,7 +138,7 @@ export class AuthService {
       AuthLogger.loginFailed(email, "Wrong password");
 
       await this.safeAudit({
-        tenantId: tenant.id,
+        tenantId: "unknown",
         userId: user.id,
         actionType: AuditActionType.LOGIN,
         granted: false,
@@ -98,19 +156,19 @@ export class AuthService {
 
     const accessToken = await this.jwtService.generateAccessToken({
       userId: user.id,
-      tenantId: tenant.id,
+      tenantId: user.tenantId,
     });
 
     const refreshToken = await this.jwtService.generateRefreshToken({
       userId: user.id,
-      tenantId: tenant.id,
+      tenantId: user.tenantId,
     });
 
     // Session Creation
     await this.sessionRepo.create({
       userId: user.id,
 
-      tenantId: tenant.id,
+      tenantId: user.tenantId,
 
       sessionTokenHash: hashToken(accessToken),
 
@@ -138,7 +196,7 @@ export class AuthService {
     });
 
     await this.safeAudit({
-      tenantId: tenant.id,
+      tenantId: user.tenantId,
       userId: user.id,
       actionType: AuditActionType.LOGIN,
       granted: true,
@@ -236,7 +294,7 @@ export class AuthService {
       granted: true,
       reason: "User logout",
       ipAddress: session?.ipAddress,
-      userAgent: session?.userAgent ,
+      userAgent: session?.userAgent,
       metadata: {
         browser: session.browser,
         operatingSystem: session.operatingSystem,
