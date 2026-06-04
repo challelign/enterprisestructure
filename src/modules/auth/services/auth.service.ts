@@ -1,4 +1,3 @@
-import { UnauthorizedError } from "@/core/errors/app-error";
 import { AuthRepository } from "../repositories/auth.repository";
 import { PasswordService } from "./password.service";
 import { JwtService } from "./jwt.service";
@@ -13,6 +12,7 @@ import { ErrorLogger } from "@/core/logging/error-logger";
 import { AuditPayload } from "@/modules/authorization/types/audit-payload";
 import { AccountStatus, AuditActionType } from "@/generated/prisma/enums";
 import { AuditService } from "@/modules/audit/services/audit.service";
+import { UnauthorizedError } from "@/core/errors/unauthorized-error";
 
 export class AuthService {
   private repo = new AuthRepository();
