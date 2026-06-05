@@ -14,13 +14,14 @@ import { seedTenant } from "./tenant.seed";
 import { seedOrganization } from "./organization.seed";
 import { seedRoles } from "./role.seed";
 import { seedAdminUser } from "./user.seed";
-import { seedRoleUsers } from "./role.users.seed";
+import { seedRoleUsers } from "./role-users.seed";
 import { cleanupDatabase } from "./cleanup";
+import { seedPermissions } from "./permission.seed";
+import { seedRolePermissions } from "./role-permission.seed";
 
 async function main() {
-
   console.log("🌱 Starting database seed...");
-  await cleanupDatabase(); 
+  await cleanupDatabase();
 
   // 1. Tenant
   const tenant = await seedTenant();
@@ -37,7 +38,15 @@ async function main() {
 
   console.log(`✅ Roles created: ${roles.length}`);
 
- const roleUsers = await seedRoleUsers(tenant.id, organization.id);
+  const permissions = await seedPermissions(tenant.id);
+
+  console.log(`✅ Permissions created: ${permissions.length}`);
+
+  await seedRolePermissions(tenant.id);
+
+  console.log("✅ Role permissions assigned");
+
+  const roleUsers = await seedRoleUsers(tenant.id, organization.id);
 
   console.log(`✅ Role users created: ${roleUsers?.length || 0}`);
 
