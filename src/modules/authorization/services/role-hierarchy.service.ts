@@ -2,19 +2,17 @@ import { AuthorizationRepository } from "../repositories/authorization.repositor
 
 export class RoleHierarchyService {
   private repo = new AuthorizationRepository();
-  async getInheritedPermissions(roleId: string): Promise<string[]> {
+  async getPermissions(roleId: string): Promise<string[]> {
     const permissions = new Set<string>();
-
-    await this.walkRole(roleId, permissions);
-
+    await this.walkRole(roleId, permissions, new Set<string>());
     return [...permissions];
   }
 
   private async walkRole(
     roleId: string,
     permissions: Set<string>,
-    visited = new Set<string>(),
-  ): Promise<void> {
+    visited: Set<string>,
+  ) {
     if (visited.has(roleId)) {
       return;
     }

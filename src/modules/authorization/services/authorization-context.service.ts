@@ -1,4 +1,5 @@
 import { AuthRepository } from "@/modules/auth/repositories/auth.repository";
+import { RoleHierarchyService } from "./role-hierarchy.service";
 
 /*
 export class AuthorizationContextService {
@@ -42,6 +43,7 @@ export class AuthorizationContextService {
 
 export class AuthorizationContextService {
   private repo = new AuthRepository();
+  private hierarchyService = new RoleHierarchyService();
 
   async build(userId: string) {
     const user = await this.repo.findUserForAuthorization(userId);
@@ -58,13 +60,19 @@ export class AuthorizationContextService {
       ...new Set(user.organizationRoles.map((x) => x.organizationId)),
     ];
 
-    const permissions = [
-      ...new Set(
-        user.organizationRoles.flatMap((x) =>
-          x.role.permissions.map((p) => p.permission.permissionKey),
-        ),
-      ),
-    ];
+    const permissionSet = new Set<string>();
+
+    for (const orgRole of user.organizationRoles) {
+      const inheritedPermissions = await this.hierarchyService.getPermissions(
+        orgRole.roleId,
+      );
+
+      inheritedPermissions.forEach((permission) =>
+        permissionSet.add(permission),
+      );
+    }
+
+    const permissions = [...permissionSet];
 
     // const isSystemAdmin = user.organizationRoles.some(
     //   (x) => x.role.isSystemRole,
