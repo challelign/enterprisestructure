@@ -2,9 +2,14 @@ import { AuthorizationRepository } from "../repositories/authorization.repositor
 
 export class RoleHierarchyService {
   private repo = new AuthorizationRepository();
+
   async getPermissions(roleId: string): Promise<string[]> {
     const permissions = new Set<string>();
-    await this.walkRole(roleId, permissions, new Set<string>());
+
+    const visited = new Set<string>();
+
+    await this.walkRole(roleId, permissions, visited);
+
     return [...permissions];
   }
 
@@ -19,7 +24,8 @@ export class RoleHierarchyService {
 
     visited.add(roleId);
 
-    const role = await this.repo.findRoleWithHierarchy(roleId);
+    const role = await this.repo.findRoleWithPermissions(roleId);
+
     if (!role) {
       return;
     }

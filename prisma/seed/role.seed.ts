@@ -56,7 +56,10 @@ export async function seedRoles(tenantId: string) {
       where: {
         roleKey: role.roleKey,
       },
-      update: {},
+      update: {
+        name: role.name,
+        hierarchyLevel: role.hierarchyLevel,
+      },
       create: {
         tenantId,
         ...role,
@@ -66,5 +69,104 @@ export async function seedRoles(tenantId: string) {
     createdRoles.push(result);
   }
 
+  // =====================================================
+  // BUILD ROLE HIERARCHY
+  // =====================================================
+
+  const publicUser = createdRoles.find((r) => r.roleKey === "public_user")!;
+
+  const user = createdRoles.find((r) => r.roleKey === "user")!;
+
+  const auditor = createdRoles.find((r) => r.roleKey === "auditor")!;
+
+  const inspector = createdRoles.find((r) => r.roleKey === "inspector")!;
+
+  const supervisor = createdRoles.find((r) => r.roleKey === "supervisor")!;
+
+  const subManager = createdRoles.find((r) => r.roleKey === "sub_manager")!;
+
+  const manager = createdRoles.find((r) => r.roleKey === "manager")!;
+
+  const admin = createdRoles.find((r) => r.roleKey === "admin")!;
+
+  const superAdmin = createdRoles.find((r) => r.roleKey === "super_admin")!;
+
+  await prisma.role.update({
+    where: { id: user.id },
+    data: {
+      inheritsFromId: publicUser.id,
+    },
+  });
+
+  await prisma.role.update({
+    where: { id: auditor.id },
+    data: {
+      inheritsFromId: user.id,
+    },
+  });
+
+  await prisma.role.update({
+    where: { id: inspector.id },
+    data: {
+      inheritsFromId: auditor.id,
+    },
+  });
+
+  await prisma.role.update({
+    where: { id: supervisor.id },
+    data: {
+      inheritsFromId: inspector.id,
+    },
+  });
+
+  await prisma.role.update({
+    where: { id: subManager.id },
+    data: {
+      inheritsFromId: supervisor.id,
+    },
+  });
+
+  await prisma.role.update({
+    where: { id: manager.id },
+    data: {
+      inheritsFromId: subManager.id,
+    },
+  });
+
+  await prisma.role.update({
+    where: { id: admin.id },
+    data: {
+      inheritsFromId: manager.id,
+    },
+  });
+
+  await prisma.role.update({
+    where: { id: superAdmin.id },
+    data: {
+      inheritsFromId: admin.id,
+    },
+  });
+
   return createdRoles;
 }
+
+/**
+ * Resulting Hierarchy
+Public User
+    ↑
+User
+    ↑
+Auditor
+    ↑
+Inspector
+    ↑
+Supervisor
+    ↑
+Sub Manager
+    ↑
+Manager
+    ↑
+Admin
+    ↑
+Super Admin
+ */

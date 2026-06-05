@@ -253,3 +253,57 @@ Bypass everything
 All Other Roles
 ↓
 Permission-Based Authorization
+
+
+# STEP 25.7 — Seed Role Hierarchy 
+
+Public User
+ ↑
+User
+ ↑
+Auditor
+ ↑
+Inspector
+ ↑
+Supervisor
+ ↑
+Sub Manager
+ ↑
+Manager
+ ↑
+Admin
+ ↑
+Super Admin
+
+This means:
+
+Super Admin inherits everything.
+# STEP 26 Will Solve This
+
+Policy Engine introduces:
+ALLOW
+DENY
+
+rules.
+
+Example:
+
+# Supervisor
+
+ALLOW tag.read
+ALLOW tag.update
+
+# Manager
+
+inherits Supervisor
+
+but:
+
+DENY tag.update
+
+Final result:
+
+# Manager
+
+tag.read ✓
+tag.update ✗

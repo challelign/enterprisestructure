@@ -48,3 +48,4 @@ npx prisma generate
 ## Run Migrations
 
 npx prisma migrate dev --name initial_enterprise_schema
+npx prisma db seed

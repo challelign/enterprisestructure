@@ -18,4 +18,20 @@ export class AuthorizationRepository {
       },
     });
   }
+
+  async findRoleWithPermissions(roleId: string) {
+    return prisma.role.findUnique({
+      where: {
+        id: roleId,
+      },
+
+      include: {
+        permissions: {
+          include: {
+            permission: true,
+          },
+        },
+      },
+    });
+  }
 }

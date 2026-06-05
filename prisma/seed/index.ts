@@ -14,9 +14,13 @@ import { seedTenant } from "./tenant.seed";
 import { seedOrganization } from "./organization.seed";
 import { seedRoles } from "./role.seed";
 import { seedAdminUser } from "./user.seed";
+import { seedRoleUsers } from "./role.users.seed";
+import { cleanupDatabase } from "./cleanup";
 
 async function main() {
+
   console.log("🌱 Starting database seed...");
+  await cleanupDatabase(); 
 
   // 1. Tenant
   const tenant = await seedTenant();
@@ -33,6 +37,13 @@ async function main() {
 
   console.log(`✅ Roles created: ${roles.length}`);
 
+ const roleUsers = await seedRoleUsers(tenant.id, organization.id);
+
+  console.log(`✅ Role users created: ${roleUsers?.length || 0}`);
+
+  /*
+  // we seed role users before seeding admin user because the admin user will be created with the super admin role, so we need to make sure that the super admin role is created before seeding the admin user.
+
   const superAdminRole = roles.find((x) => x.roleKey === "super_admin");
 
   if (!superAdminRole) {
@@ -47,7 +58,7 @@ async function main() {
   );
 
   console.log(`✅ Admin user created: ${admin.email}`);
-
+*/
   console.log("🎉 Database seed completed");
 }
 
