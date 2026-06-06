@@ -1,71 +1,44 @@
 import { prisma } from "./prisma";
+import {
+  ROLE_PERMISSION_MATRIX,
+} from "./permission-groups";
 
-export async function seedRolePermissions(tenantId: string) {
+export async function seedRolePermissions(
+  tenantId: string,
+) {
   const roles = await prisma.role.findMany();
 
-  const permissions = await prisma.permission.findMany();
+  const permissions =
+    await prisma.permission.findMany();
 
-  const getRole = (key: string) => roles.find((r) => r.roleKey === key);
+  const getRole = (roleKey: string) =>
+    roles.find(
+      (r) => r.roleKey === roleKey,
+    );
 
-  const getPermission = (key: string) =>
-    permissions.find((p) => p.permissionKey === key);
+  const getPermission = (
+    permissionKey: string,
+  ) =>
+    permissions.find(
+      (p) =>
+        p.permissionKey ===
+        permissionKey,
+    );
 
-  const assignments = [
-    {
-      role: "public_user",
-      permissions: ["dashboard.read"],
-    },
-
-    {
-      role: "user",
-      permissions: ["tag.read"],
-    },
-
-    {
-      role: "auditor",
-      permissions: ["audit.read"],
-    },
-
-    {
-      role: "inspector",
-      permissions: ["tag.update"],
-    },
-
-    {
-      role: "supervisor",
-      permissions: ["organization.read"],
-    },
-
-    {
-      role: "sub_manager",
-      permissions: ["user.read"],
-    },
-
-    {
-      role: "manager",
-      permissions: ["tag.create"],
-    },
-
-    {
-      role: "admin",
-      permissions: ["user.create", "user.update", "role.read"],
-    },
-
-    {
-      role: "super_admin",
-      permissions: [],
-    },
-  ];
-
-  for (const assignment of assignments) {
-    const role = getRole(assignment.role);
+  for (const [roleKey, permissionKeys] of Object.entries(
+    ROLE_PERMISSION_MATRIX,
+  )) {
+    const role = getRole(roleKey);
 
     if (!role) {
       continue;
     }
 
-    for (const permissionKey of assignment.permissions) {
-      const permission = getPermission(permissionKey);
+    for (const permissionKey of permissionKeys) {
+      const permission =
+        getPermission(
+          permissionKey,
+        );
 
       if (!permission) {
         continue;
@@ -75,16 +48,21 @@ export async function seedRolePermissions(tenantId: string) {
         where: {
           roleId_permissionId: {
             roleId: role.id,
-            permissionId: permission.id,
+            permissionId:
+              permission.id,
           },
         },
 
-        update: {},
+        update: {
+          effect: "ALLOW",
+        },
 
         create: {
           tenantId,
           roleId: role.id,
-          permissionId: permission.id,
+          permissionId:
+            permission.id,
+          effect: "ALLOW",
         },
       });
     }

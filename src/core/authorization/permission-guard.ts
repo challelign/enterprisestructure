@@ -1,9 +1,9 @@
-
 import { ForbiddenError } from "@/core/errors/forbidden-error";
 
 import { CurrentUser } from "@/core/auth/current-user";
 
 import { Roles, ADMIN_BYPASS_ROLES } from "./roles.constants";
+import { PolicyEngineService } from "@/modules/authorization/services/policy-engine.service";
 
 // ====================================
 // ONLY SUPER ADMIN BYPASS
@@ -21,7 +21,6 @@ function hasBypassRole(currentUser: CurrentUser) {
 
 // It checks if the permission string provided is included in the currentUser.permissions array.
 // ====================================
-
 export function requirePermission(
   currentUser: CurrentUser,
   permission: string,
@@ -29,12 +28,17 @@ export function requirePermission(
   console.log("Current User Roles:", currentUser.roles);
 
   console.log("Current User Permissions:", currentUser.permissions);
+  const policyEngine = new PolicyEngineService();
 
   if (hasBypassRole(currentUser)) {
     return;
   }
 
-  const hasPermission = currentUser.permissions.includes(permission);
+  // const hasPermission = currentUser.permissions.includes(permission);
+  const hasPermission = policyEngine.evaluate(
+    currentUser.permissionGrants,
+    permission,
+  );
 
   if (!hasPermission) {
     throw new ForbiddenError(`Missing permission: ${permission}`);

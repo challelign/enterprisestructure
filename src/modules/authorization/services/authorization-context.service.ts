@@ -61,6 +61,7 @@ export class AuthorizationContextService {
     ];
 
     const permissionSet = new Set<string>();
+    const permissionGrants = [];
 
     for (const orgRole of user.organizationRoles) {
       const inheritedPermissions = await this.hierarchyService.getPermissions(
@@ -70,13 +71,14 @@ export class AuthorizationContextService {
       inheritedPermissions.forEach((permission) =>
         permissionSet.add(permission),
       );
+
+      const grants = await this.hierarchyService.getPermissionGrants(
+        orgRole.roleId,
+      );
+      permissionGrants.push(...grants);
     }
 
     const permissions = [...permissionSet];
-
-    // const isSystemAdmin = user.organizationRoles.some(
-    //   (x) => x.role.isSystemRole,
-    // );
 
     return {
       userId: user.id,
@@ -86,7 +88,7 @@ export class AuthorizationContextService {
       roles,
       organizations,
       permissions,
-      // isSystemAdmin,
+      permissionGrants,
     };
   }
 }
