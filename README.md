@@ -49,3 +49,10 @@ npx prisma generate
 
 npx prisma migrate dev --name initial_enterprise_schema
 npx prisma db seed
+
+
+Tenant
+ ├── Federal Organization
+ ├── Region Organization
+ ├── Zone Organization
+ ├── Woreda Organization
