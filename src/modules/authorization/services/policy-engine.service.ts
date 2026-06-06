@@ -1,19 +1,79 @@
 import { PermissionGrant } from "../types/permission-grant";
+import { PolicyContext } from "../types/policy-context";
 
 export class PolicyEngineService {
-  evaluate(grants: PermissionGrant[], permissionKey: string): boolean {
-    const matching = grants.filter((x) => x.permissionKey === permissionKey);
+  evaluate(
+    grants: PermissionGrant[],
+    permissionKey: string,
+    context?: PolicyContext,
+  ): boolean {
+    const matchingGrants = grants.filter(
+      (grant) => grant.permissionKey === permissionKey,
+    );
 
-    if (matching.length === 0) {
+    if (matchingGrants.length === 0) {
       return false;
     }
 
-    const denied = matching.some((x) => x.effect === "DENY");
+    // DENY always wins
+    const hasDeny = matchingGrants.some(
+      (grant) =>
+        grant.effect === "DENY" &&
+        this.evaluateConditions(grant.conditions, context),
+    );
 
-    if (denied) {
+    if (hasDeny) {
       return false;
     }
 
-    return matching.some((x) => x.effect === "ALLOW");
+    // At least one valid ALLOW
+    const hasAllow = matchingGrants.some(
+      (grant) =>
+        grant.effect === "ALLOW" &&
+        this.evaluateConditions(grant.conditions, context),
+    );
+
+    return hasAllow;
+  }
+
+  private evaluateConditions(
+    conditions: unknown,
+    context?: PolicyContext,
+  ): boolean {
+    if (!conditions) {
+      return true;
+    }
+
+    const policy = conditions as Record<string, any>;
+
+    // Organization restriction
+    if (
+      policy.organizationId &&
+      policy.organizationId !== context?.organizationId
+    ) {
+      return false;
+    }
+
+    // Region restriction
+    if (policy.regionId && policy.regionId !== context?.regionId) {
+      return false;
+    }
+
+    // Zone restriction
+    if (policy.zoneId && policy.zoneId !== context?.zoneId) {
+      return false;
+    }
+
+    // Woreda restriction
+    if (policy.woredaId && policy.woredaId !== context?.woredaId) {
+      return false;
+    }
+
+    // Resource owner restriction
+    if (policy.ownerOnly && context?.resourceOwnerId !== context?.userId) {
+      return false;
+    }
+
+    return true;
   }
 }

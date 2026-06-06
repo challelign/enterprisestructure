@@ -307,3 +307,371 @@ Final result:
 
 tag.read ✓
 tag.update ✗
+
+STEP 26.7 — Conditional Policies (ABAC Foundation)
+
+Currently your Policy Engine only evaluates:
+
+ALLOW
+DENY
+
+But your schema already has:
+
+conditions Json?
+
+which means we can support:
+
+{
+  "organizationId": "org-123"
+}
+
+or
+
+{
+  "ownerOnly": true
+}
+
+or
+
+{
+  "regionId": "amhara"
+}
+
+# Right now the simpler flow is:
+
+Request
+ ↓
+authenticate()
+ ↓
+authorize()
+ ↓
+service
+ ↓
+response
+
+requirePermission()      → ONE permission
+requireAnyPermission()   → OR
+requireAllPermissions()  → AND
+
+This is a very important question because many developers add all three methods but don't understand **when to use each one**.
+
+Think of them like this:
+
+```text
+requirePermission()      → ONE permission
+requireAnyPermission()   → OR
+requireAllPermissions()  → AND
+```
+
+---
+
+# 1. requirePermission()
+
+Use when the endpoint requires exactly one permission.
+
+Example:
+
+```ts
+requirePermission(
+  currentUser,
+  Permissions.ORGANIZATION_READ,
+);
+```
+
+Meaning:
+
+```text
+Must have:
+organization.read
+```
+
+### Example Route
+
+```http
+GET /organizations
+```
+
+Permission:
+
+```text
+organization.read
+```
+
+Only one permission is needed.
+
+---
+
+# 2. requireAnyPermission()
+
+Use when multiple roles may access the same endpoint through different permissions.
+
+Think:
+
+```text
+A OR B OR C
+```
+
+Example:
+
+```ts
+requireAnyPermission(
+  currentUser,
+  [
+    Permissions.TAG_READ,
+    Permissions.TAG_UPDATE,
+  ],
+);
+```
+
+Meaning:
+
+```text
+tag.read
+OR
+tag.update
+```
+
+Either permission is enough.
+
+---
+
+### Real Example
+
+Open Tag Details
+
+```http
+GET /tags/123
+```
+
+Who can access?
+
+```text
+Inspector
+Supervisor
+Manager
+```
+
+Inspector has:
+
+```text
+tag.read
+```
+
+Manager has:
+
+```text
+tag.update
+```
+
+You don't care which permission they have.
+
+You only care that they are authorized somehow.
+
+```ts
+requireAnyPermission(
+  currentUser,
+  [
+    Permissions.TAG_READ,
+    Permissions.TAG_UPDATE,
+  ],
+);
+```
+
+---
+
+# 3. requireAllPermissions()
+
+Use when the user must have every permission.
+
+Think:
+
+```text
+A AND B AND C
+```
+
+Example:
+
+```ts
+requireAllPermissions(
+  currentUser,
+  [
+    Permissions.TAG_READ,
+    Permissions.TAG_UPDATE,
+  ],
+);
+```
+
+Meaning:
+
+```text
+Must have:
+tag.read
+AND
+tag.update
+```
+
+---
+
+### Real Example
+
+Edit Tag Screen
+
+Before editing a tag:
+
+```text
+Need to read the tag
+Need to update the tag
+```
+
+Require:
+
+```ts
+requireAllPermissions(
+  currentUser,
+  [
+    Permissions.TAG_READ,
+    Permissions.TAG_UPDATE,
+  ],
+);
+```
+
+---
+
+# Your Digital Tag System Examples
+
+---
+
+## Read Organization
+
+```http
+GET /organizations
+```
+
+Use:
+
+```ts
+requirePermission(
+  currentUser,
+  Permissions.ORGANIZATION_READ,
+);
+```
+
+Because only one permission is required.
+
+---
+
+## Dashboard
+
+Users may enter if they have any dashboard permission.
+
+```ts
+requireAnyPermission(
+  currentUser,
+  [
+    Permissions.DASHBOARD_READ,
+    Permissions.DASHBOARD_ADMIN,
+  ],
+);
+```
+
+Meaning:
+
+```text
+dashboard.read
+OR
+dashboard.admin
+```
+
+---
+
+## Assign User To Organization
+
+This is sensitive.
+
+Need:
+
+```text
+user.update
+AND
+organization.update
+```
+
+Use:
+
+```ts
+requireAllPermissions(
+  currentUser,
+  [
+    Permissions.USER_UPDATE,
+    Permissions.ORGANIZATION_UPDATE,
+  ],
+);
+```
+
+---
+
+# In Your Project
+
+Honestly, for 90% of endpoints you will use:
+
+```ts
+requirePermission()
+```
+
+Example:
+
+```text
+GET /tags           -> tag.read
+POST /tags          -> tag.create
+PUT /tags/:id       -> tag.update
+DELETE /tags/:id    -> tag.delete
+
+GET /users          -> user.read
+POST /users         -> user.create
+PUT /users/:id      -> user.update
+DELETE /users/:id   -> user.delete
+```
+
+---
+
+# What I Recommend
+
+For your current phase:
+
+Keep:
+
+```ts
+requirePermission()
+```
+
+Use occasionally:
+
+```ts
+requireAnyPermission()
+```
+
+for dashboards, reports, search screens.
+
+Use rarely:
+
+```ts
+requireAllPermissions()```
+
+for administrative operations such as:
+
+```text
+Assign Role
+Transfer Organization Ownership
+Approve Workflow
+Manage User Access
+```
+
+So in a typical enterprise system:
+
+```text
+requirePermission()      → 80%
+requireAnyPermission()   → 15%
+requireAllPermissions()  → 5%
+```
+
+That's why I usually implement all three, but most routes end up using the single-permission version.
